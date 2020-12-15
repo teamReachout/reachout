@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "117942331996",
+    "project_id": "reachout-83af9",
+    "storage_bucket": "reachout-83af9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117942331996:android:0cbf2c797391cbee6cd499",
+        "android_client_info": {
+          "package_name": "com.example.reachout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117942331996-ls6740bie2j25bk8r9362dsa9sgj3f15.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reachout",
+            "certificate_hash": "0dcc1e100489cdeab123f143132768f7ebde1610"
+          }
+        },
+        {
+          "client_id": "117942331996-9ihju7kvuok8qo8jua93s9euosbf8j17.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX8NbwLMLQgH_n2P7Xx0sOE_b-CIvqeik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117942331996-9ihju7kvuok8qo8jua93s9euosbf8j17.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
