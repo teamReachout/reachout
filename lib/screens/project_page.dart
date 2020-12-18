@@ -2,44 +2,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
-import 'package:reachout/models/education.dart';
-import 'package:reachout/models/experience.dart';
+import 'package:reachout/models/project.dart';
 import 'package:reachout/models/users.dart';
-import 'package:reachout/screens/project_page.dart';
-import 'package:reachout/screens/create_project_page.dart';
-import 'package:reachout/screens/edit_education.dart';
-import 'package:reachout/screens/edit_experience.dart';
-import 'package:reachout/screens/edit_user_work.dart';
-import 'package:reachout/screens/edit_profile.dart';
-import 'package:reachout/widgets/education_row.dart';
-import 'package:reachout/widgets/experience_row.dart';
+import 'package:reachout/screens/edit_project.dart';
+import 'package:reachout/screens/edit_project_work.dart';
+import 'package:reachout/screens/edit_project_members.dart';
 import 'package:reachout/widgets/interests.dart';
+import 'package:reachout/widgets/user_card.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProjectPage extends StatefulWidget {
+  final String projectId;
   final String profileId;
-  final VoidCallback onSignedOut;
 
-  ProfilePage({
+  ProjectPage({
+    this.projectId,
     this.profileId,
-    this.onSignedOut,
   });
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProjectPageState createState() => _ProjectPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProjectPageState extends State<ProjectPage> {
   List tags = ['travel', 'urban', 'fashion', 'lifestyle', 'editing'];
-  String imageUrl =
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3fZ_ebLrIR7-37WMGcyj_RO-0TTcZGtUKtg&usqp=CAU';
   bool isLoading;
   List<String> interests = [];
   bool isFollowing = false;
   int followerCount = 0;
   int followingCount = 0;
-  List<Experience> experiences = [];
-  List<Education> educations = [];
-  Map<String, String> project = {};
-  List<String> lists = ['Create New Project', 'Sign Out'];
+  List<User> cofounders = [];
+  List<User> collaborators = [];
+  Project proj;
 
   createColumn(int numb, String text) {
     return Column(
@@ -77,25 +69,26 @@ class _ProfilePageState extends State<ProfilePage> {
     await Navigator.of(context)
         .push(
           MaterialPageRoute(
-            builder: (context) => EditProfile(
-              profileId: currentUser.id,
+            builder: (context) => EditProject(
+              projectId: widget.projectId,
             ),
           ),
         )
-        .then((value) => setState(() {}));
+        .then(
+          (value) => setState(() {}),
+        );
   }
 
   editTimeline(String timeline) async {
     await Navigator.of(context)
         .push(
           MaterialPageRoute(
-            builder: (context) => timeline == 'Education'
-                ? EditEducation(
-                    profileId: currentUser.id,
-                  )
-                : EditExperience(
-                    profileId: currentUser.id,
-                  ),
+            builder: (context) => EditProjectMembers(
+              profileId: currentUser.id,
+              projectId: widget.projectId,
+              users: timeline == 'Collaborators' ? collaborators : cofounders,
+              designation: timeline,
+            ),
           ),
         )
         .then((value) => setState(() {}));
@@ -105,8 +98,9 @@ class _ProfilePageState extends State<ProfilePage> {
     await Navigator.of(context)
         .push(
           MaterialPageRoute(
-            builder: (context) => EditUserWork(
-              profileId: currentUser.id,
+            builder: (context) => EditProjectWork(
+              profileId: widget.profileId,
+              projectId: widget.projectId,
             ),
           ),
         )
@@ -184,17 +178,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   buildContactInfo() {
     return FutureBuilder(
-      future: usersRef.document(widget.profileId).get(),
+      future: projectRef
+          .document(widget.profileId)
+          .collection('userProject')
+          .document(widget.projectId)
+          .get(),
       builder: (ctx, snapshot) {
         if (!snapshot.hasData) {
           return CircularProgressIndicator();
         }
-        User user = User.fromDocument(snapshot.data);
+        Project project = Project.fromDocument(snapshot.data);
         return Padding(
           padding: const EdgeInsets.only(top: 12.0),
           child: Column(
             children: <Widget>[
-              contactInfo('Email', user.email),
+              contactInfo('Email', project.contact),
             ],
           ),
         );
@@ -240,12 +238,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   buildAboutUser() {
     return FutureBuilder(
-      future: usersRef.document(widget.profileId).get(),
+      future: projectRef
+          .document(widget.profileId)
+          .collection('userProject')
+          .document(widget.projectId)
+          .get(),
       builder: (ctx, snapshot) {
         if (!snapshot.hasData) {
           return CircularProgressIndicator();
         }
-        User user = User.fromDocument(snapshot.data);
+        Project project = Project.fromDocument(snapshot.data);
         return Padding(
           padding: const EdgeInsets.only(top: 12.0),
           child: Column(
@@ -257,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Expanded(
                     child: Text(
-                      user.bio,
+                      project.bio,
                       style: TextStyle(fontSize: 18.0),
                     ),
                   ),
@@ -296,33 +298,24 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildTimeline() {
-    return Positioned(
-      top: 0.0,
-      bottom: 0.0,
-      left: 35.0,
-      child: Container(width: 1.0, color: Colors.black),
-    );
-  }
-
-  buildEducation() {
+  buildCollaborator() {
     return Column(
       children: <Widget>[
-        ...educations
+        ...collaborators
             .map(
-              (education) => EducationRow(education: education),
+              (collaborator) => UserCard(user: collaborator),
             )
             .toList(),
       ],
     );
   }
 
-  buildExperience() {
+  buildFounders() {
     return Column(
       children: <Widget>[
-        ...experiences
+        ...cofounders
             .map(
-              (experience) => ExperienceRow(experience: experience),
+              (founder) => UserCard(user: founder),
             )
             .toList(),
       ],
@@ -336,10 +329,8 @@ class _ProfilePageState extends State<ProfilePage> {
         Padding(
           padding: const EdgeInsets.only(left: 28.0, top: 7),
           child: CircleAvatar(
-            radius: 40,
-            backgroundImage: currentUser.photoUrl.trim() == ''
-                ? NetworkImage(imageUrl)
-                : NetworkImage(currentUser.photoUrl),
+            radius: 64,
+            backgroundImage: NetworkImage(proj.photoUrl),
           ),
         ),
         Padding(
@@ -348,37 +339,13 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                currentUser.firstName,
+                proj.name,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 28,
+                  fontSize: 48,
                   color: Colors.black,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.black,
-                      size: 17,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Aleppo-SY',
-                        style: TextStyle(
-                          color: Colors.black,
-                          wordSpacing: 2,
-                          letterSpacing: 4,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
             ],
           ),
         ),
@@ -449,87 +416,92 @@ class _ProfilePageState extends State<ProfilePage> {
   buildProfileButton() {
     var isProfileOwner = currentUser.id == widget.profileId;
     if (isProfileOwner) {
-      return Text('');
+      return buildButton(
+        text: "Edit",
+        function: null,
+      );
     } else if (isFollowing) {
       return buildButton(
         text: "Unfollow",
-        function: handleUnfollowUser,
+        // function: handleUnfollowUser,
+        function: null,
       );
     } else if (!isFollowing) {
       return buildButton(
         text: "Follow",
-        function: handlefollowUser,
+        // function: handlefollowUser,
+        function: null,
       );
     }
   }
 
-  handleUnfollowUser() {
-    setState(() {
-      isFollowing = false;
-    });
-    followersRef
-        .document(widget.profileId)
-        .collection('userFollowers')
-        .document(currentUser.id)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    followingRef
-        .document(currentUser.id)
-        .collection('userFollowing')
-        .document(widget.profileId)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    activityFeedRef
-        .document(widget.profileId)
-        .collection('feedItems')
-        .document(currentUser.id)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    getFollowers();
-    getFollowing();
-  }
+  // handleUnfollowUser() {
+  //   setState(() {
+  //     isFollowing = false;
+  //   });
+  //   followersRef
+  //       .document(widget.profileId)
+  //       .collection('userFollowers')
+  //       .document(currentUser.id)
+  //       .get()
+  //       .then((doc) {
+  //     if (doc.exists) {
+  //       doc.reference.delete();
+  //     }
+  //   });
+  //   followingRef
+  //       .document(currentUser.id)
+  //       .collection('userFollowing')
+  //       .document(widget.profileId)
+  //       .get()
+  //       .then((doc) {
+  //     if (doc.exists) {
+  //       doc.reference.delete();
+  //     }
+  //   });
+  //   activityFeedRef
+  //       .document(widget.profileId)
+  //       .collection('feedItems')
+  //       .document(currentUser.id)
+  //       .get()
+  //       .then((doc) {
+  //     if (doc.exists) {
+  //       doc.reference.delete();
+  //     }
+  //   });
+  //   getFollowers();
+  //   getFollowing();
+  // }
 
-  handlefollowUser() {
-    setState(() {
-      isFollowing = true;
-    });
-    followersRef
-        .document(widget.profileId)
-        .collection('userFollowers')
-        .document(currentUser.id)
-        .setData({});
-    followingRef
-        .document(currentUser.id)
-        .collection('userFollowing')
-        .document(widget.profileId)
-        .setData({});
-    activityFeedRef
-        .document(widget.profileId)
-        .collection('feedItems')
-        .document(currentUser.id)
-        .setData({
-      'type': 'follow',
-      'ownerId': widget.profileId,
-      'userId': currentUser.id,
-      'username': currentUser.firstName,
-      'userProfileImg': currentUser.photoUrl,
-      'timestamp': timestamp,
-    });
-    getFollowers();
-    getFollowing();
-  }
+  // handlefollowUser() {
+  //   setState(() {
+  //     isFollowing = true;
+  //   });
+  //   followersRef
+  //       .document(widget.profileId)
+  //       .collection('userFollowers')
+  //       .document(currentUser.id)
+  //       .setData({});
+  //   followingRef
+  //       .document(currentUser.id)
+  //       .collection('userFollowing')
+  //       .document(widget.profileId)
+  //       .setData({});
+  //   activityFeedRef
+  //       .document(widget.profileId)
+  //       .collection('feedItems')
+  //       .document(currentUser.id)
+  //       .setData({
+  //     'type': 'follow',
+  //     'ownerId': widget.profileId,
+  //     'userId': currentUser.id,
+  //     'username': currentUser.firstName,
+  //     'userProfileImg': currentUser.photoUrl,
+  //     'timestamp': timestamp,
+  //   });
+  //   getFollowers();
+  //   getFollowing();
+  // }
 
   buildUserInterests() {
     return Container(
@@ -568,86 +540,114 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // Education experience = Education(
-    //   title: 'Class 10th',
-    //   institute: 'DPS RKPURAM',
-    //   description: 'Science',
-    //   active: true,
-    //   date: 'Since 2018',
-    // );
-    // final exp = experience.toMap();
-    // usersRef.document(widget.profileId).updateData({
-    //   'educations': [exp]
-    // });
-    getFollowers();
-    getProject();
-    getFollowing();
+    // getFollowers();
+    // getFollowing();
     getInterests();
-    getEducation();
-    getExperience();
-    checkIfFollowing();
+    getCofounders();
+    getCollaborators();
+    // checkIfFollowing();
+    getProject();
     super.initState();
   }
 
-  Future<void> getProject() async {
+  getProject() async {
+    DocumentSnapshot doc = await projectRef
+        .document(widget.profileId)
+        .collection('userProject')
+        .document(widget.projectId)
+        .get();
+    proj = Project.fromDocument(doc);
+  }
+
+  getCollaborators() async {
     setState(() {
       isLoading = true;
     });
-    lists = ['Create New Project', 'Sign Out'];
-    project = {};
-    QuerySnapshot doc = await projectRef
+    collaborators = [];
+    DocumentSnapshot doc = await projectRef
         .document(widget.profileId)
         .collection('userProject')
-        .getDocuments();
-    doc.documents.forEach((proj) {
-      project[proj.data['name']] = proj.documentID;
-      lists.add(proj.data['name']);
+        .document(widget.projectId)
+        .get();
+    List<dynamic> users = doc.data['collaborators'];
+    users.forEach((userId) async {
+      DocumentSnapshot document =
+          await usersRef.document(userId.toString()).get();
+      User user = User.fromDocument(document);
+      collaborators.add(user);
     });
     setState(() {
       isLoading = false;
     });
   }
 
-  getFollowers() async {
-    QuerySnapshot doc = await followersRef
-        .document(widget.profileId)
-        .collection('userFollowers')
-        .getDocuments();
+  getCofounders() async {
     setState(() {
-      followerCount = doc.documents.length;
+      isLoading = true;
     });
-  }
-
-  getFollowing() async {
-    QuerySnapshot doc = await followingRef
+    cofounders = [];
+    DocumentSnapshot doc = await projectRef
         .document(widget.profileId)
-        .collection('userFollowing')
-        .getDocuments();
-    // print(doc.documents.length);
-    setState(() {
-      followingCount = doc.documents.length;
-    });
-  }
-
-  checkIfFollowing() async {
-    DocumentSnapshot doc = await followersRef
-        .document(widget.profileId)
-        .collection('userFollowers')
-        .document(currentUser.id)
+        .collection('userProject')
+        .document(widget.projectId)
         .get();
+    List<dynamic> users = doc.data['founders'];
+    users.forEach((userId) async {
+      DocumentSnapshot document =
+          await usersRef.document(userId.toString()).get();
+      User user = User.fromDocument(document);
+      cofounders.add(user);
+    });
     setState(() {
-      isFollowing = doc.exists;
+      isLoading = false;
     });
   }
+
+  // getFollowers() async {
+  //   QuerySnapshot doc = await followersRef
+  //       .document(widget.profileId)
+  //       .collection('userFollowers')
+  //       .getDocuments();
+  //   setState(() {
+  //     followerCount = doc.documents.length;
+  //   });
+  // }
+
+  // getFollowing() async {
+  //   QuerySnapshot doc = await followingRef
+  //       .document(widget.profileId)
+  //       .collection('userFollowing')
+  //       .getDocuments();
+  //   print(doc.documents.length);
+  //   setState(() {
+  //     followingCount = doc.documents.length;
+  //   });
+  // }
+
+  // checkIfFollowing() async {
+  //   DocumentSnapshot doc = await followersRef
+  //       .document(widget.profileId)
+  //       .collection('userFollowers')
+  //       .document(currentUser.id)
+  //       .get();
+  //   setState(() {
+  //     isFollowing = doc.exists;
+  //   });
+  // }
 
   Future<void> getInterests() async {
     setState(() {
       isLoading = true;
     });
     interests = [];
-    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
-    User user = User.fromDocument(doc);
-    user.areaOfWork.forEach((element) {
+    DocumentSnapshot doc = await projectRef
+        .document(widget.profileId)
+        .collection('userProject')
+        .document(widget.projectId)
+        .get();
+
+    Project project = Project.fromDocument(doc);
+    project.areaOfWork.forEach((element) {
       interests.add(element.toString());
     });
     setState(() {
@@ -655,117 +655,14 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future<void> getExperience() async {
-    setState(() {
-      isLoading = true;
-    });
-    experiences = [];
-    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
-    User user = User.fromDocument(doc);
-    user.experiences.forEach((element) {
-      Experience exp = Experience(
-        date: element['date'],
-        description: element['description'],
-        company: element['company'],
-        jobTitle: element['jobTitle'],
-        active: element['active'],
-      );
-      experiences.add(exp);
-    });
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future<void> getEducation() async {
-    setState(() {
-      isLoading = true;
-    });
-    educations = [];
-    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
-    User user = User.fromDocument(doc);
-    user.educations.forEach((element) {
-      Education edu = Education(
-        date: element['date'],
-        description: element['description'],
-        institute: element['institute'],
-        title: element['title'],
-        active: element['active'],
-      );
-      educations.add(edu);
-    });
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   Future<void> refresh() async {
-    getEducation();
-    getExperience();
+    getCofounders();
+    getCollaborators();
     getInterests();
-    getProject();
   }
 
   AppBar appBar() {
-    return AppBar(
-      actions: <Widget>[
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return lists.map((choice) {
-              return PopupMenuItem(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: choiceAction,
-        ),
-      ],
-    );
-  }
-
-  void choiceAction(String choice) {
-    // print(choice);
-    if (choice == 'Create New Project') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => CreateProjectPage(
-            profileId: widget.profileId,
-          ),
-        ),
-      );
-    } else if (choice == 'Sign Out') {
-      widget.onSignedOut();
-    } else {
-      String id = project[choice];
-      // print(id);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ProjectPage(
-            profileId: widget.profileId,
-            projectId: id,
-          ),
-        ),
-      );
-    }
-  }
-
-  buildProjects() {
-    Iterable<String> projectNames = project.keys;
-    return Column(
-      children: <Widget>[
-        ...projectNames.map(
-          (name) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text(name),
-              ),
-            );
-          },
-        ).toList(),
-      ],
-    );
+    return AppBar();
   }
 
   @override
@@ -791,7 +688,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: buildProfileData(),
                       ),
-                      buildUserInterests(),
+                      // buildUserInterests(),
                       Expanded(
                         child: Container(
                           width: double.infinity,
@@ -824,13 +721,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             // buildProfilePosts(),
                             // buildDivider(),
                             _buildTimelineHeader(
-                                'Experience', MdiIcons.briefcaseOutline),
+                              'Founders',
+                              MdiIcons.briefcaseOutline,
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Stack(
                                 children: <Widget>[
-                                  _buildTimeline(),
-                                  buildExperience(),
+                                  buildFounders(),
                                 ],
                               ),
                             ),
@@ -844,26 +742,20 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             _buildTimelineHeader(
-                                'Education', MdiIcons.schoolOutline),
+                              'Collaborators',
+                              MdiIcons.schoolOutline,
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Stack(
                                 children: <Widget>[
-                                  _buildTimeline(),
-                                  buildEducation(),
+                                  buildCollaborator(),
                                 ],
                               ),
                             ),
                             buildDivider(),
-                            _buildTopHeader('Projects', Icons.group_work),
-                            buildProjects(),
-                            buildDivider(),
                             _buildTopHeader('Contact', Icons.phone),
                             buildContactInfo(),
-                            SizedBox(
-                              height: 25,
-                              width: double.infinity,
-                            ),
                           ],
                         ),
                       );

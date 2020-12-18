@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/users.dart';
+import 'package:reachout/widgets/appbar.dart';
 import 'package:reachout/widgets/post.dart';
 
 class UserFeed extends StatefulWidget {
@@ -22,7 +23,7 @@ class _UserFeedState extends State<UserFeed> {
         .collection('timelinePosts')
         .orderBy('timestamp', descending: true)
         .getDocuments();
-    print(snapshot.documents.length);
+    // print(snapshot.documents.length);
     List<Post> posts =
         snapshot.documents.map((doc) => Post.fromDocument(doc)).toList();
     setState(() {
@@ -65,7 +66,7 @@ class _UserFeedState extends State<UserFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        child: AppBar(),
+        child: Appbar(),
         preferredSize: const Size.fromHeight(44),
       ),
       body: CustomScrollView(

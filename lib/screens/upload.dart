@@ -3,7 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_tags/flutter_tags.dart';
@@ -169,13 +168,6 @@ class _UploadState extends State<Upload> {
                 ),
               ),
             ],
-            leading: IconButton(
-              icon: Icon(
-                Icons.clear,
-                color: Color.fromRGBO(244, 248, 245, 1),
-              ),
-              onPressed: clearImage,
-            ),
             primary: true,
             title: Text(
               'Share a post',

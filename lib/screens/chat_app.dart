@@ -8,8 +8,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/models/users.dart';
 
 class ChatApp extends StatefulWidget {
+  final User sender;
+  final User reciever;
+
+  ChatApp({
+    this.sender,
+    this.reciever,
+  });
   @override
   _ChatAppState createState() => _ChatAppState();
 }
@@ -17,13 +25,13 @@ class ChatApp extends StatefulWidget {
 class _ChatAppState extends State<ChatApp> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
 
-  final ChatUser user1 = ChatUser(
-    name: "Fayeed",
-    firstName: "Fayeed",
-    lastName: "Pawaskar",
-    uid: "12345678",
-    avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
-  );
+  // final ChatUser user1 = ChatUser(
+  //   name: "Fayeed",
+  //   firstName: "Fayeed",
+  //   lastName: "Pawaskar",
+  //   uid: "12345678",
+  //   avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
+  // );
 
   final ChatUser user = ChatUser(
     name: currentUser.firstName,
@@ -40,7 +48,7 @@ class _ChatAppState extends State<ChatApp> {
 
   List<ChatMessage> messages = List<ChatMessage>();
   var m = List<ChatMessage>();
-
+  List<DocumentSnapshot> items = [];
   var i = 0;
 
   void systemMessage() {
@@ -63,25 +71,16 @@ class _ChatAppState extends State<ChatApp> {
   }
 
   void onSend(ChatMessage message) async {
-    print(message.toJson());
+    // print(message.toJson());
     // var documentReference = Firestore.instance
     //     .collection('messages')
     //     .document(DateTime.now().millisecondsSinceEpoch.toString());
 
     messagesRef
-        .document(user.uid)
+        .document(widget.sender.id)
         .collection('userChats')
-        .document(user1.uid)
-        .setData({
-      'createdAt': message.createdAt,
-      'customProperties': message.customProperties,
-      'id': message.id,
-      'image': message.image,
-      'quickReplies': message.quickReplies,
-      'text': message.text,
-      'video': message.video,
-      'user': message.user,
-    });
+        .document(widget.reciever.id)
+        .setData(message.toJson());
 
     // await Firestore.instance.runTransaction((transaction) async {
     //   await transaction.set(
@@ -105,13 +104,34 @@ class _ChatAppState extends State<ChatApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getMessages();
+  }
+
+  getMessages() async {
+    DocumentSnapshot doc = await messagesRef
+        .document(widget.sender.id)
+        .collection('userChats')
+        .document(widget.reciever.id)
+        .get();
+
+    items.add(doc);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Chat App"),
       ),
       body: StreamBuilder(
-        stream: Firestore.instance.collection('messages').snapshots(),
+        // stream: Firestore.instance.collection('messages').snapshots(),
+        stream: messagesRef
+            .document(widget.sender.id)
+            .collection('userChats')
+            .document(widget.reciever.id)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -122,7 +142,7 @@ class _ChatAppState extends State<ChatApp> {
               ),
             );
           } else {
-            List<DocumentSnapshot> items = snapshot.data.documents;
+            items.add(snapshot.data);
             var messages =
                 items.map((i) => ChatMessage.fromJson(i.data)).toList();
             return DashChat(
@@ -141,10 +161,10 @@ class _ChatAppState extends State<ChatApp> {
               showAvatarForEveryMessage: false,
               scrollToBottom: true,
               onPressAvatar: (ChatUser user) {
-                print("OnPressAvatar: ${user.name}");
+                // print("OnPressAvatar: ${user.name}");
               },
               onLongPressAvatar: (ChatUser user) {
-                print("OnLongPressAvatar: ${user.name}");
+                // print("OnLongPressAvatar: ${user.name}");
               },
               inputMaxLines: 5,
               messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
@@ -187,7 +207,7 @@ class _ChatAppState extends State<ChatApp> {
                 });
               },
               onLoadEarlier: () {
-                print("laoding...");
+                // print("laoding...");
               },
               shouldShowLoadEarlier: false,
               showTraillingBeforeSend: true,
