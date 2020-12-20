@@ -56,6 +56,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       'name': nameController.text,
       'contact': contactController.text,
       'photoUrl': '',
+      'why': '',
       'bio': bioController.text,
       'areaOfWork': [],
       'founders': [currentUser.id],

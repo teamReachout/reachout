@@ -34,8 +34,10 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isLoading;
   List<String> interests = [];
   bool isFollowing = false;
+  bool isRequested = false;
   int followerCount = 0;
   int followingCount = 0;
+  User profile;
   List<Experience> experiences = [];
   List<Education> educations = [];
   Map<String, String> project = {};
@@ -348,7 +350,7 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                currentUser.firstName,
+                profile.firstName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
@@ -455,12 +457,34 @@ class _ProfilePageState extends State<ProfilePage> {
         text: "Unfollow",
         function: handleUnfollowUser,
       );
-    } else if (!isFollowing) {
+    } else if (!isFollowing && !isRequested) {
       return buildButton(
         text: "Follow",
         function: handlefollowUser,
       );
+    } else {
+      return buildButton(
+        text: "Cancel Request",
+        function: cancelRequest,
+      );
     }
+  }
+
+  cancelRequest() {
+    print('object');
+    requestsRef
+        .document(widget.profileId)
+        .collection('userRequests')
+        .document(currentUser.id)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    setState(() {
+      isRequested = false;
+    });
   }
 
   handleUnfollowUser() {
@@ -501,34 +525,45 @@ class _ProfilePageState extends State<ProfilePage> {
     getFollowing();
   }
 
+  // handlefollowUser() {
+  //   setState(() {
+  //     isFollowing = true;
+  //   });
+  //   followersRef
+  //       .document(widget.profileId)
+  //       .collection('userFollowers')
+  //       .document(currentUser.id)
+  //       .setData({});
+  //   followingRef
+  //       .document(currentUser.id)
+  //       .collection('userFollowing')
+  //       .document(widget.profileId)
+  //       .setData({});
+  //   activityFeedRef
+  //       .document(widget.profileId)
+  //       .collection('feedItems')
+  //       .document(currentUser.id)
+  //       .setData({
+  //     'type': 'follow',
+  //     'ownerId': widget.profileId,
+  //     'userId': currentUser.id,
+  //     'username': currentUser.firstName,
+  //     'userProfileImg': currentUser.photoUrl,
+  //     'timestamp': timestamp,
+  //   });
+  //   getFollowers();
+  //   getFollowing();
+  // }
+
   handlefollowUser() {
     setState(() {
-      isFollowing = true;
+      isRequested = true;
     });
-    followersRef
+    requestsRef
         .document(widget.profileId)
-        .collection('userFollowers')
+        .collection('userRequests')
         .document(currentUser.id)
         .setData({});
-    followingRef
-        .document(currentUser.id)
-        .collection('userFollowing')
-        .document(widget.profileId)
-        .setData({});
-    activityFeedRef
-        .document(widget.profileId)
-        .collection('feedItems')
-        .document(currentUser.id)
-        .setData({
-      'type': 'follow',
-      'ownerId': widget.profileId,
-      'userId': currentUser.id,
-      'username': currentUser.firstName,
-      'userProfileImg': currentUser.photoUrl,
-      'timestamp': timestamp,
-    });
-    getFollowers();
-    getFollowing();
   }
 
   buildUserInterests() {
@@ -583,10 +618,23 @@ class _ProfilePageState extends State<ProfilePage> {
     getProject();
     getFollowing();
     getInterests();
+    checkIfRequested();
     getEducation();
     getExperience();
+    getUser();
     checkIfFollowing();
     super.initState();
+  }
+
+  getUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
+    profile = User.fromDocument(doc);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> getProject() async {
@@ -637,6 +685,17 @@ class _ProfilePageState extends State<ProfilePage> {
         .get();
     setState(() {
       isFollowing = doc.exists;
+    });
+  }
+
+  checkIfRequested() async {
+    DocumentSnapshot doc = await requestsRef
+        .document(widget.profileId)
+        .collection('userRequests')
+        .document(currentUser.id)
+        .get();
+    setState(() {
+      isRequested = doc.exists;
     });
   }
 
@@ -708,19 +767,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   AppBar appBar() {
     return AppBar(
-      actions: <Widget>[
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return lists.map((choice) {
-              return PopupMenuItem(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: choiceAction,
-        ),
-      ],
+      actions: widget.profileId != currentUser.id
+          ? null
+          : <Widget>[
+              PopupMenuButton(
+                itemBuilder: (BuildContext context) {
+                  return lists.map((choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+                onSelected: choiceAction,
+              ),
+            ],
     );
   }
 

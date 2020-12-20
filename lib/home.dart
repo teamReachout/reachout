@@ -12,6 +12,7 @@ import 'models/users.dart';
 
 final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
+final projectPostsRef = Firestore.instance.collection('projectPosts');
 final commentsRef = Firestore.instance.collection('comments');
 final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
@@ -20,6 +21,7 @@ final tagsRef = Firestore.instance.collection('tags');
 final timelineRef = Firestore.instance.collection('timeline');
 final projectRef = Firestore.instance.collection('projects');
 final messagesRef = Firestore.instance.collection('messages');
+final requestsRef = Firestore.instance.collection('requests');
 final storageRef = FirebaseStorage.instance.ref();
 final timestamp = DateTime.now();
 

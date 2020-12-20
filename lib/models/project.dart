@@ -6,6 +6,7 @@ class Project {
   final String contact;
   final String photoUrl;
   final String bio;
+  final String why;
   final List<dynamic> areaOfWork;
   final List<dynamic> founders;
   final List<dynamic> collaborators;
@@ -16,6 +17,7 @@ class Project {
     this.contact,
     this.photoUrl,
     this.bio,
+    this.why,
     this.areaOfWork,
     this.founders,
     this.collaborators,
@@ -30,6 +32,7 @@ class Project {
       bio: doc['bio'],
       areaOfWork: doc['areaOfWork'],
       founders: doc['founders'],
+      why: doc['why'],
       collaborators: doc['collaborators'],
     );
   }

@@ -5,8 +5,10 @@ import 'package:reachout/home.dart';
 import 'package:reachout/models/project.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/edit_project.dart';
+import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:reachout/screens/edit_project_work.dart';
 import 'package:reachout/screens/edit_project_members.dart';
+import 'package:reachout/screens/edit_projects_posts.dart';
 import 'package:reachout/widgets/interests.dart';
 import 'package:reachout/widgets/user_card.dart';
 
@@ -23,15 +25,17 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
-  List tags = ['travel', 'urban', 'fashion', 'lifestyle', 'editing'];
   bool isLoading;
   List<String> interests = [];
   bool isFollowing = false;
+  int _focusedIndex = 0;
   int followerCount = 0;
   int followingCount = 0;
   List<User> cofounders = [];
   List<User> collaborators = [];
+  List<String> posts = [];
   Project proj;
+  int _widgetIndex = 0;
 
   createColumn(int numb, String text) {
     return Column(
@@ -94,6 +98,19 @@ class _ProjectPageState extends State<ProjectPage> {
         .then((value) => setState(() {}));
   }
 
+  editPosts() async {
+    await Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (context) => EditProjectsPosts(
+              projectId: widget.projectId,
+              posts: posts,
+            ),
+          ),
+        )
+        .then((value) => setState(() {}));
+  }
+
   editAreaOfWork() async {
     await Navigator.of(context)
         .push(
@@ -121,6 +138,42 @@ class _ProjectPageState extends State<ProjectPage> {
               child: Text(
                 text,
                 style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ),
+          currentUser.id == widget.profileId
+              ? IconButton(
+                  icon: Icon(Icons.edit, color: Colors.black),
+                  onPressed:
+                      text == 'Area of Work' ? editAreaOfWork : editSection,
+                )
+              : Icon(icon, color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPostHeader(String text, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8.0,
+        vertical: 2.0,
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text(
+                text,
+                style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
                     fontWeight: FontWeight.w300),
@@ -130,8 +183,7 @@ class _ProjectPageState extends State<ProjectPage> {
           currentUser.id == widget.profileId
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
-                  onPressed:
-                      text == 'Area of Work' ? editAreaOfWork : editSection,
+                  onPressed: editPosts,
                 )
               : Icon(icon, color: Colors.black),
           Padding(
@@ -236,7 +288,7 @@ class _ProjectPageState extends State<ProjectPage> {
     );
   }
 
-  buildAboutUser() {
+  buildAboutProject() {
     return FutureBuilder(
       future: projectRef
           .document(widget.profileId)
@@ -270,12 +322,49 @@ class _ProjectPageState extends State<ProjectPage> {
                   top: 8.0,
                   bottom: 8.0,
                 ),
-                child: Divider(
-                  thickness: 2,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  buildWhyProject() {
+    return FutureBuilder(
+      future: projectRef
+          .document(widget.profileId)
+          .collection('userProject')
+          .document(widget.projectId)
+          .get(),
+      builder: (ctx, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        Project project = Project.fromDocument(snapshot.data);
+        return Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                  ),
+                  Expanded(
+                    child: Text(
+                      project.why,
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 8.0,
+                  bottom: 8.0,
                 ),
               ),
-              _buildTopHeader('Area of Work', Icons.desktop_windows),
-              buildAreaOfWork(),
             ],
           ),
         );
@@ -503,41 +592,6 @@ class _ProjectPageState extends State<ProjectPage> {
   //   getFollowing();
   // }
 
-  buildUserInterests() {
-    return Container(
-      height: 44,
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int i) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(33),
-              border: Border.all(
-                color: Colors.white12,
-              ),
-            ),
-            margin: EdgeInsets.only(right: 13),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 10.0,
-                bottom: 5,
-                right: 20,
-                left: 20,
-              ),
-              child: Text(
-                tags[i],
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          );
-        },
-        itemCount: tags.length,
-        scrollDirection: Axis.horizontal,
-      ),
-    );
-  }
-
   @override
   void initState() {
     // getFollowers();
@@ -545,9 +599,20 @@ class _ProjectPageState extends State<ProjectPage> {
     getInterests();
     getCofounders();
     getCollaborators();
+    getPosts();
     // checkIfFollowing();
     getProject();
     super.initState();
+  }
+
+  getPosts() async {
+    QuerySnapshot doc = await projectPostsRef
+        .document(widget.projectId)
+        .collection('posts')
+        .getDocuments();
+    doc.documents.forEach((doc) {
+      posts.add(doc.data['mediaUrl']);
+    });
   }
 
   getProject() async {
@@ -665,6 +730,28 @@ class _ProjectPageState extends State<ProjectPage> {
     return AppBar();
   }
 
+  Widget _buildPostItem(BuildContext ctx, int i) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        height: 400,
+        width: 300,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(posts[i]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onItemFocus(int index) {
+    setState(() {
+      _focusedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -688,7 +775,6 @@ class _ProjectPageState extends State<ProjectPage> {
                         ),
                         child: buildProfileData(),
                       ),
-                      // buildUserInterests(),
                       Expanded(
                         child: Container(
                           width: double.infinity,
@@ -714,12 +800,34 @@ class _ProjectPageState extends State<ProjectPage> {
                         child: ListView(
                           controller: controller,
                           children: <Widget>[
+                            _buildTopHeader(
+                                'Area of Work', Icons.desktop_windows),
+                            buildAreaOfWork(),
+                            Divider(
+                              thickness: 2,
+                            ),
                             _buildTopHeader('About', Icons.person_outline),
-                            buildAboutUser(),
+                            buildAboutProject(),
                             buildDivider(),
-                            // _buildPostHeader('Posts'),
-                            // buildProfilePosts(),
-                            // buildDivider(),
+                            _buildTopHeader(
+                                'Why we Started', Icons.person_outline),
+                            buildWhyProject(),
+                            Divider(
+                              thickness: 2,
+                            ),
+                            _buildPostHeader('Posts', Icons.photo_album),
+                            Container(
+                              height: 500,
+                              width: 500,
+                              child: ScrollSnapList(
+                                onItemFocus: _onItemFocus,
+                                itemSize: 0,
+                                itemBuilder: _buildPostItem,
+                                itemCount: posts.length,
+                                reverse: true,
+                              ),
+                            ),
+                            buildDivider(),
                             _buildTimelineHeader(
                               'Founders',
                               MdiIcons.briefcaseOutline,

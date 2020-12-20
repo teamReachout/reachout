@@ -13,6 +13,7 @@ class EditProject extends StatefulWidget {
 class _EditProjectState extends State<EditProject> {
   TextEditingController bioController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController whyController = TextEditingController();
   bool isLoading;
   User user;
 
@@ -61,6 +62,15 @@ class _EditProjectState extends State<EditProject> {
         "email": emailController.text,
       });
     }
+    if (emailController.text.trim() != '') {
+      projectRef
+          .document(currentUser.id)
+          .collection('userProject')
+          .document(widget.projectId)
+          .updateData({
+        "why": whyController.text,
+      });
+    }
     Navigator.of(context).pop();
   }
 
@@ -88,6 +98,7 @@ class _EditProjectState extends State<EditProject> {
                     children: <Widget>[
                       buildField("Bio", bioController),
                       buildField("Email", emailController),
+                      buildField("Why we started", whyController)
                     ],
                   ),
                 ),

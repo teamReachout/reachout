@@ -50,6 +50,7 @@ class Search extends SearchDelegate<dynamic> {
       MaterialPageRoute(
         builder: (context) => ProfilePage(
           profileId: id,
+          onSignedOut: null,
         ),
       ),
     );

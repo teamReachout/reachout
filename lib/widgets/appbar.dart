@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:reachout/screens/chat_list.dart';
 import 'package:reachout/widgets/search.dart';
 
-class Appbar extends StatelessWidget {
+class Appbar extends StatefulWidget {
   @override
-  AppBar build(BuildContext context) {
+  _AppbarState createState() => _AppbarState();
+}
+
+class _AppbarState extends State<Appbar> {
+  chatList() {
+    print('cvlkjhjkjhjk');
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => ChatList(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
       shape: RoundedRectangleBorder(
@@ -17,7 +32,7 @@ class Appbar extends StatelessWidget {
             Icons.send,
             color: const Color.fromRGBO(244, 248, 245, 1),
           ),
-          onPressed: null,
+          onPressed: chatList,
         ),
       ],
       leading: IconButton(

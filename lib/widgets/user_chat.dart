@@ -21,7 +21,7 @@ class _UserChatState extends State<UserChat> {
       MaterialPageRoute(
         builder: (context) => ChatApp(
           sender: widget.sender,
-          reciever: widget.reciever,
+          receiver: widget.reciever,
         ),
       ),
     );
