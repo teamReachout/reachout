@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/screens/requests_page.dart';
 import 'package:reachout/widgets/appbar.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:reachout/widgets/notification_item.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:reachout/screens/requests_page.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -57,14 +59,28 @@ class _NotificationsState extends State<Notifications> {
       ),
       body: Column(
         children: <Widget>[
-          Flexible(
-            child: GestureDetector(
-              onTap: goToRequests,
-              child: ListTile(
-                title: Text('YOUR REQUESTS'),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 5.0, 6.0, 6.0),
+            alignment: Alignment.centerRight,
+            child: OutlinedButton(
+              onPressed: goToRequests,
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
+                  // elevation: MaterialStateProperty.all(2.0),
+                  padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
+                  shape: MaterialStateProperty.all(ContinuousRectangleBorder(borderRadius: BorderRadius.circular(2))),
+                  ),
+              child: Text(
+                'YOUR REQUESTS',
+                style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                    fontSize: 16,
+                    color: Colors.white),
               ),
             ),
-          ),
+          )
+          ,
           Flexible(
             child: Container(
               child: FutureBuilder(

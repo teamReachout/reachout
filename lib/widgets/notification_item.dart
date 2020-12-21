@@ -91,7 +91,7 @@ class NotificationItem extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: username,
+                    text: username + ' ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

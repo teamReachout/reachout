@@ -10,6 +10,7 @@ import 'package:reachout/screens/comments.dart';
 import 'package:reachout/screens/profile_page.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:google_fonts/google_fonts.dart';
 
 class Post extends StatefulWidget {
   final String postId;
@@ -168,32 +169,74 @@ class _PostState extends State<Post> {
         }
         User user = User.fromDocument(snapshot.data);
         bool isPostOwner = currentUserId == ownerId;
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(user.photoUrl),
-            backgroundColor: Colors.grey,
-          ),
-          title: GestureDetector(
-            onTap: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => ProfilePage(),
+        return Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+                backgroundColor: Colors.grey,
               ),
-            ),
-            child: Text(
-              user.firstName,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+              title: GestureDetector(
+                onTap: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                ),
+                child: Text(
+                  user.firstName,
+                  style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      letterSpacing: 0.5),
+                  // style: TextStyle(
+                  //   color: Colors.black,
+                  //   fontWeight: FontWeight.bold,
+                  //   ),
+                ),
               ),
+              subtitle: Text(location),
+              trailing: isPostOwner
+                  ? IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () => handleDeletePost(context),
+                    )
+                  : Text(''),
             ),
-          ),
-          subtitle: Text(location),
-          trailing: isPostOwner
-              ? IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () => handleDeletePost(context),
-                )
-              : Text(''),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                top: 2,
+                bottom: 6,
+              ),
+              child: mediaUrl.trim() == ''
+                  ? null
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // // Container(
+                        // //   child: Text(
+                        // //     '$username',
+                        // //     style: TextStyle(
+                        // //       color: Colors.black,
+                        // //       fontWeight: FontWeight.bold,
+                        // //     ),
+                        // //   ),
+                        // // ),
+                        // Text(' '),
+                        Expanded(
+                          child: ReadMoreText(
+                            description,
+                            trimLines: 2,
+                            colorClickableText: Colors.grey,
+                            trimMode: TrimMode.Line,
+                            trimCollapsedText: '...Show more',
+                            trimExpandedText: ' show less',
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ],
         );
       },
     );
@@ -271,16 +314,31 @@ class _PostState extends State<Post> {
     }
   }
 
-  buildPostImage() {
+  buildPostImage(var data) {
     return GestureDetector(
       onDoubleTap: handleLikePost,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          CachedNetworkImage(
-            imageUrl: mediaUrl,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 8.0, 0, 12),
+        child: Container(
+          // width: data.width,
+          // height: data.height * 0.7,
+          decoration: BoxDecoration(boxShadow: kElevationToShadow[3]
+          // [BoxShadow(
+          //   color: Colors.black,
+          // )]
           ),
-        ],
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CachedNetworkImage(
+                imageUrl: mediaUrl,
+                // fit: BoxFit.fill,
+                // width: data.width,
+                height: data.height * 0.7
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -379,11 +437,14 @@ class _PostState extends State<Post> {
             ],
           ),
         ),
-        Divider(
-          color: Colors.black,
-          thickness: 1,
-          indent: 25,
-          endIndent: 25,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
+          child: Divider(
+            color: Colors.black,
+            thickness: 1,
+            indent: 25,
+            endIndent: 25,
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -392,7 +453,7 @@ class _PostState extends State<Post> {
               margin: EdgeInsets.only(
                 left: 20,
                 top: 2,
-                bottom: 2,
+                bottom: 8,
               ),
               child: Row(
                 children: <Widget>[
@@ -430,40 +491,40 @@ class _PostState extends State<Post> {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 20,
-            top: 6,
-            bottom: 6,
-          ),
-          child: mediaUrl.trim() == ''
-              ? null
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        '$username',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Text(' '),
-                    Expanded(
-                      child: ReadMoreText(
-                        description,
-                        trimLines: 2,
-                        colorClickableText: Colors.grey,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: '...Show more',
-                        trimExpandedText: ' show less',
-                      ),
-                    ),
-                  ],
-                ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(
+        //     left: 20,
+        //     top: 6,
+        //     bottom: 6,
+        //   ),
+        //   child: mediaUrl.trim() == ''
+        //       ? null
+        //       : Row(
+        //           crossAxisAlignment: CrossAxisAlignment.start,
+        //           children: <Widget>[
+        //             Container(
+        //               child: Text(
+        //                 '$username',
+        //                 style: TextStyle(
+        //                   color: Colors.black,
+        //                   fontWeight: FontWeight.bold,
+        //                 ),
+        //               ),
+        //             ),
+        //             Text(' '),
+        //             Expanded(
+        //               child: ReadMoreText(
+        //                 description,
+        //                 trimLines: 2,
+        //                 colorClickableText: Colors.grey,
+        //                 trimMode: TrimMode.Line,
+        //                 trimCollapsedText: '...Show more',
+        //                 trimExpandedText: ' show less',
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        // ),
         ListTile(
           title: Padding(
             padding: const EdgeInsets.only(
@@ -545,36 +606,48 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
+    var deviceData = MediaQuery.of(context).size;
+    // print(deviceData);
     isLiked = (likes[currentUserId] == true);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        buildPostHeader(),
-        mediaUrl.trim() == '' ? buildDescription() : buildPostImage(),
-        buildPostFooter(context),
-        Container(
-          alignment: AlignmentDirectional.centerStart,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Text(
-              timeago.format(
-                DateTime.now(),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            buildPostHeader(),
+            mediaUrl.trim() == ''
+                ? buildDescription()
+                : buildPostImage(deviceData),
+            buildPostFooter(context),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 5.0, 0, 5.0),
+              child: Container(
+                alignment: AlignmentDirectional.centerStart,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    timeago.format(
+                      DateTime.now(),
+                    ),
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
               ),
-              style: TextStyle(
-                color: Colors.grey[500],
-              ),
-              textAlign: TextAlign.end,
             ),
-          ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+            //   child: Divider(
+            //     color: Color.fromRGBO(217, 217, 217, 1),
+            //     thickness: 10,
+            //   ),
+            // ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-          child: Divider(
-            color: Color.fromRGBO(217, 217, 217, 1),
-            thickness: 10,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

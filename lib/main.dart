@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.white70,
+        statusBarColor: Colors.white,
       ),
     );
     return MaterialApp(
@@ -30,8 +30,10 @@ class _MyAppState extends State<MyApp> {
       ),
       debugShowCheckedModeBanner: false,
       // home: SafeArea(child: Home()),
-      home: Splash(
-        auth: widget.auth,
+      home: SafeArea(
+              child: Splash(
+          auth: widget.auth,
+        ),
       ),
     );
   }

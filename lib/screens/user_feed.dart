@@ -65,6 +65,7 @@ class _UserFeedState extends State<UserFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
         child: Appbar(),
         preferredSize: const Size.fromHeight(44),

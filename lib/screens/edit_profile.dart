@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/users.dart';
+import 'package:reachout/models/constants.dart';
 
 class EditProfile extends StatefulWidget {
   final String profileId;
@@ -16,14 +17,14 @@ class _EditProfileState extends State<EditProfile> {
   bool isLoading;
   User user;
 
-  buildField(String text, TextEditingController controller) {
+  buildField(String heading, TextEditingController controller, String boxText) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: 12),
           child: Text(
-            text,
+            heading,
             style: TextStyle(
               color: Colors.grey,
             ),
@@ -31,9 +32,9 @@ class _EditProfileState extends State<EditProfile> {
         ),
         TextField(
           controller: controller,
-          decoration: InputDecoration(
-            hintText: "Update Data",
-          ),
+          minLines: 3,
+          maxLines: 5,
+          decoration: inputDecoration(boxText),
         ),
       ],
     );
@@ -77,8 +78,8 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: <Widget>[
-                      buildField("Bio", bioController),
-                      buildField("Email", emailController),
+                      buildField("Bio", bioController, 'Bio'),
+                      buildField("Email", emailController, 'Email'),
                     ],
                   ),
                 ),

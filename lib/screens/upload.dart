@@ -143,7 +143,7 @@ class _UploadState extends State<Upload> {
 
   Scaffold buildUploadForm() {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(244, 248, 245, 1),
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         child: SafeArea(
           child: AppBar(
@@ -154,179 +154,407 @@ class _UploadState extends State<Upload> {
               ),
             ),
             actions: <Widget>[
-              FlatButton(
-                onPressed: captionController.text == null
-                    ? null
-                    : isUploading ? null : () => handleSubmit(),
-                child: Text(
-                  'Post',
-                  style: TextStyle(
-                    color: Color.fromRGBO(244, 248, 245, 1),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Colors.purple[300],
+                ),
+                child: FlatButton(
+                  onPressed: captionController.text == null
+                      ? null
+                      : isUploading
+                          ? null
+                          : () => handleSubmit(),
+                  child: Text(
+                    'POST',
+                    style: TextStyle(
+                      color: Color.fromRGBO(244, 248, 245, 1),
+                      fontWeight: FontWeight.normal,
+                      letterSpacing: 2.0,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ),
             ],
             primary: true,
-            title: Text(
-              'Share a post',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(244, 248, 245, 1),
-              ),
-            ),
+            // title: Text(
+            //   'UPLOAD',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     color: Color.fromRGBO(244, 248, 245, 1),
+            //   ),
+            // ),
           ),
         ),
         preferredSize: Size.fromHeight(44),
       ),
       body: isUploading
           ? CircularProgressIndicator()
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: CachedNetworkImageProvider(
-                      currentUser.photoUrl,
+          : Padding(
+              padding: EdgeInsets.only(top: 0.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(
+                          currentUser.photoUrl,
+                        ),
+                      ),
+                      title: Container(
+                        // width: 250,
+                        child: Text(
+                            currentUser.firstName + " " + currentUser.lastName),
+                      ),
+                      tileColor: Colors.grey[100],
                     ),
                   ),
-                  title: Container(
-                    width: 250,
-                    child: Text(
-                        currentUser.firstName + " " + currentUser.lastName),
-                  ),
-                ),
-                Divider(
-                  color: Color.fromRGBO(89, 89, 89, 1),
-                  thickness: 2,
-                  indent: 45,
-                  endIndent: 45,
-                ),
-                ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          key: _formKey,
-                          autocorrect: true,
-                          minLines: 1,
-                          maxLines: 5,
-                          cursorColor: Color.fromRGBO(89, 89, 89, 1),
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(fontSize: 20),
-                          controller: captionController,
-                          decoration: InputDecoration(
-                            hintText: 'Give Your Inputs',
-                            border: InputBorder.none,
+                  // Divider(
+                  //   color: Color.fromRGBO(89, 89, 89, 1),
+                  //   thickness: 2,
+                  //   indent: 45,
+                  //   endIndent: 45,
+                  // ),
+                  file == null
+                      ? Container()
+                      : Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Container(
+                              child: Center(
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    image: file == null
+                                        ? null
+                                        : DecorationImage(
+                                            fit: BoxFit.contain,
+                                            image: FileImage(file),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 0.0),
+                    child: Card(
+                      child: Container(
+                        decoration: BoxDecoration(color: Colors.grey[200]),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: TextField(
+                                  key: _formKey,
+                                  autocorrect: true,
+                                  minLines: 1,
+                                  maxLines: 5,
+                                  cursorColor: Color.fromRGBO(89, 89, 89, 1),
+                                  keyboardType: TextInputType.text,
+                                  style: TextStyle(fontSize: 20),
+                                  controller: captionController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter Caption',
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.photo_library),
+                                onPressed: handleChooseFromGallery,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.photo_library),
-                        onPressed: handleChooseFromGallery,
-                      ),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.pin_drop,
-                    color: Theme.of(context).primaryColor,
-                    size: 35,
-                  ),
-                  title: Container(
-                    width: 250,
-                    child: TextField(
-                      controller: locationController,
-                      decoration: InputDecoration(
-                        hintText: 'Location',
-                        border: InputBorder.none,
-                      ),
                     ),
                   ),
-                  trailing: CircleAvatar(
-                    backgroundColor: Color.fromRGBO(244, 248, 245, 1),
-                    radius: 25,
-                    child: IconButton(
-                      onPressed: getUserLocation,
-                      icon: Icon(
-                        Icons.my_location,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
-                Tags(
-                  key: _tagKey,
-                  itemCount: tags.length,
-                  columns: 3,
-                  textField: TagsTextField(
-                    hintText: 'Enter 1 word tags',
-                    textStyle: TextStyle(
-                      fontSize: 14,
-                    ),
-                    onSubmitted: (tag) {
-                      if (tag.split(' ').length == 1) {
-                        setState(() {
-                          tags.add(
-                            Item(
-                              title: tag,
-                            ),
-                          );
-                        });
-                      }
-                    },
-                  ),
-                  itemBuilder: (i) {
-                    final Item currentItem = tags[i];
-                    return ItemTags(
-                      index: i,
-                      title: currentItem.title,
-                      customData: currentItem.customData,
-                      textStyle: TextStyle(fontSize: 14),
-                      combine: ItemTagsCombine.withTextBefore,
-                      onPressed: null,
-                      onLongPressed: null,
-                      removeButton: ItemTagsRemoveButton(
-                        onRemoved: () {
-                          setState(() {
-                            tags.removeAt(i);
-                          });
-                          return true;
-                        },
-                      ),
-                    );
-                  },
-                ),
-                Expanded(
-                  child: Container(
-                    child: Center(
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          image: file == null
-                              ? null
-                              : DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: FileImage(file),
+                  // Card(
+                  //   child: ListTile(
+                  //     leading: Icon(
+                  //       Icons.pin_drop,
+                  //       color: Theme.of(context).primaryColor,
+                  //       size: 35,
+                  //     ),
+                  //     title: Container(
+                  //       width: 250,
+                  //       child: TextField(
+                  //         controller: locationController,
+                  //         decoration: InputDecoration(
+                  //           hintText: 'Location',
+                  //           border: InputBorder.none,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     trailing: CircleAvatar(
+                  //       backgroundColor: Color.fromRGBO(244, 248, 245, 1),
+                  //       radius: 25,
+                  //       child: IconButton(
+                  //         onPressed: getUserLocation,
+                  //         icon: Icon(
+                  //           Icons.my_location,
+                  //           color: Theme.of(context).primaryColor,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(bottom: 10.0),
+                  //   child: Tags(
+                  //     key: _tagKey,
+                  //     itemCount: tags.length,
+                  //     columns: 3,
+                  //     textField: TagsTextField(
+                  //       hintText: 'Enter 1 word tags',
+                  //       textStyle: TextStyle(
+                  //         fontSize: 14,
+                  //       ),
+                  //       onSubmitted: (tag) {
+                  //         if (tag.split(' ').length == 1) {
+                  //           setState(() {
+                  //             tags.add(
+                  //               Item(
+                  //                 title: tag,
+                  //               ),
+                  //             );
+                  //           });
+                  //         }
+                  //       },
+                  //     ),
+                  //     itemBuilder: (i) {
+                  //       final Item currentItem = tags[i];
+                  //       return ItemTags(
+                  //         index: i,
+                  //         title: currentItem.title,
+                  //         customData: currentItem.customData,
+                  //         textStyle: TextStyle(fontSize: 14),
+                  //         combine: ItemTagsCombine.withTextBefore,
+                  //         onPressed: null,
+                  //         onLongPressed: null,
+                  //         removeButton: ItemTagsRemoveButton(
+                  //           onRemoved: () {
+                  //             setState(() {
+                  //               tags.removeAt(i);
+                  //             });
+                  //             return true;
+                  //           },
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  // file == null ? Container() :
+                  // Expanded(
+                  //   child: Container(
+                  //     child: Center(
+                  //       child: Container(
+                  //         width: double.infinity,
+                  //         decoration: BoxDecoration(
+                  //           image: file == null
+                  //               ? null
+                  //               : DecorationImage(
+                  //                   fit: BoxFit.contain,
+                  //                   image: FileImage(file),
+                  //                 ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: Tags(
+                              key: _tagKey,
+                              itemCount: tags.length,
+                              columns: 3,
+                              textField: TagsTextField(
+                                hintText: 'Enter 1 word tags',
+                                textStyle: TextStyle(
+                                  fontSize: 14,
                                 ),
+                                inputDecoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    // borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                onSubmitted: (tag) {
+                                  if (tag.split(' ').length == 1) {
+                                    setState(() {
+                                      tags.add(
+                                        Item(
+                                          title: tag,
+                                        ),
+                                      );
+                                    });
+                                  }
+                                },
+                              ),
+                              itemBuilder: (i) {
+                                final Item currentItem = tags[i];
+                                return ItemTags(
+                                  index: i,
+                                  title: currentItem.title,
+                                  customData: currentItem.customData,
+                                  textStyle: TextStyle(fontSize: 14),
+                                  combine: ItemTagsCombine.withTextBefore,
+                                  onPressed: null,
+                                  onLongPressed: null,
+                                  removeButton: ItemTagsRemoveButton(
+                                    onRemoved: () {
+                                      setState(() {
+                                        tags.removeAt(i);
+                                      });
+                                      return true;
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.blueAccent)),
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.pin_drop,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 35,
+                                ),
+                                title: Container(
+                                  width: 250,
+                                  child: TextField(
+                                    controller: locationController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Location',
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                trailing: CircleAvatar(
+                                  backgroundColor:
+                                      Color.fromRGBO(244, 248, 245, 1),
+                                  radius: 25,
+                                  child: IconButton(
+                                    onPressed: getUserLocation,
+                                    icon: Icon(
+                                      Icons.my_location,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                ),
-              ],
+                  // Padding(
+                  //   padding: EdgeInsets.only(bottom: 10.0),
+                  //   child: Tags(
+                  //     key: _tagKey,
+                  //     itemCount: tags.length,
+                  //     columns: 3,
+                  //     textField: TagsTextField(
+                  //       hintText: 'Enter 1 word tags',
+                  //       textStyle: TextStyle(
+                  //         fontSize: 14,
+                  //       ),
+                  //       onSubmitted: (tag) {
+                  //         if (tag.split(' ').length == 1) {
+                  //           setState(() {
+                  //             tags.add(
+                  //               Item(
+                  //                 title: tag,
+                  //               ),
+                  //             );
+                  //           });
+                  //         }
+                  //       },
+                  //     ),
+                  //     itemBuilder: (i) {
+                  //       final Item currentItem = tags[i];
+                  //       return ItemTags(
+                  //         index: i,
+                  //         title: currentItem.title,
+                  //         customData: currentItem.customData,
+                  //         textStyle: TextStyle(fontSize: 14),
+                  //         combine: ItemTagsCombine.withTextBefore,
+                  //         onPressed: null,
+                  //         onLongPressed: null,
+                  //         removeButton: ItemTagsRemoveButton(
+                  //           onRemoved: () {
+                  //             setState(() {
+                  //               tags.removeAt(i);
+                  //             });
+                  //             return true;
+                  //           },
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  // Card(
+                  //   child: ListTile(
+                  //     leading: Icon(
+                  //       Icons.pin_drop,
+                  //       color: Theme.of(context).primaryColor,
+                  //       size: 35,
+                  //     ),
+                  //     title: Container(
+                  //       // width: 250,
+                  //       child: TextField(
+                  //         controller: locationController,
+                  //         decoration: InputDecoration(
+                  //           hintText: 'Location',
+                  //           border: InputBorder.none,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     trailing: CircleAvatar(
+                  //       backgroundColor: Color.fromRGBO(244, 248, 245, 1),
+                  //       radius: 25,
+                  //       child: IconButton(
+                  //         onPressed: getUserLocation,
+                  //         icon: Icon(
+                  //           Icons.my_location,
+                  //           color: Theme.of(context).primaryColor,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: EdgeInsets.only(top: 10),
+                  // ),
+                ],
+              ),
             ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    var deviceData = MediaQuery.of(context);
+    print(deviceData);
     return buildUploadForm();
   }
 }

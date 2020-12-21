@@ -11,10 +11,14 @@ class RequestsPage extends StatefulWidget {
 class _RequestsPageState extends State<RequestsPage> {
   List<User> requests = [];
 
+  int numberOfRequests;
+
   @override
   void initState() {
     super.initState();
     getUserRequests();
+    numberOfRequests = requests.length;
+    print(numberOfRequests);
   }
 
   getUserRequests() async {

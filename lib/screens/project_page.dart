@@ -354,6 +354,7 @@ class _ProjectPageState extends State<ProjectPage> {
                   Expanded(
                     child: Text(
                       project.why,
+                      // 'HELOO',
                       style: TextStyle(fontSize: 18.0),
                     ),
                   ),
@@ -418,7 +419,7 @@ class _ProjectPageState extends State<ProjectPage> {
         Padding(
           padding: const EdgeInsets.only(left: 28.0, top: 7),
           child: CircleAvatar(
-            radius: 64,
+            radius: 48, //changed from 64
             backgroundImage: NetworkImage(proj.photoUrl),
           ),
         ),
@@ -760,6 +761,8 @@ class _ProjectPageState extends State<ProjectPage> {
           ? CircularProgressIndicator()
           : RefreshIndicator(
               child: Stack(
+                overflow: Overflow.clip,
+                // alignment: AlignmentDirectional.bottomCenter,
                 children: <Widget>[
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -792,6 +795,7 @@ class _ProjectPageState extends State<ProjectPage> {
                     ],
                   ),
                   DraggableScrollableSheet(
+                    
                     builder: (ctx, controller) {
                       return Container(
                         decoration: BoxDecoration(
