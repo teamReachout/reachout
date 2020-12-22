@@ -14,9 +14,6 @@ import 'package:reachout/screens/edit_profile.dart';
 import 'package:reachout/widgets/education_row.dart';
 import 'package:reachout/widgets/experience_row.dart';
 import 'package:reachout/widgets/interests.dart';
-import 'package:reachout/models/constants.dart';
-import 'package:reachout/screens/edit_profile.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ProfilePage extends StatefulWidget {
   final String profileId;
@@ -31,19 +28,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  List tags = ['travel', 'urban', 'fashion', 'lifestyle', 'editing'];
   String imageUrl =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3fZ_ebLrIR7-37WMGcyj_RO-0TTcZGtUKtg&usqp=CAU';
   bool isLoading;
-  List<String> interests = [];
-  bool isFollowing = false;
-  bool isRequested = false;
-  int followerCount = 0;
-  int followingCount = 0;
-  User profile;
-  List<Experience> experiences = [];
-  List<Education> educations = [];
-  Map<String, String> project = {};
+  bool isCurrentUser;
   List<String> lists = ['Create New Project', 'Sign Out'];
 
   createColumn(int numb, String text) {
@@ -129,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       builder: (BuildContext context) {
-        return editWidget;//EditProfile(profileId: currentUser.id);
+        return editWidget; //EditProfile(profileId: currentUser.id);
       },
     );
   }
@@ -148,9 +136,10 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Text(
                 text,
                 style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w300),
+                  fontSize: 20.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ),
           ),
@@ -160,7 +149,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   onPressed: text == 'Area of Work'
                       ? editAreaOfWork
                       : () {
-                          modalSheetFunction(EditProfile(profileId: currentUser.id));
+                          modalSheetFunction(
+                              EditProfile(profileId: currentUser.id));
                         } //editSection //modalSheetFunction(context)
                   )
               : Icon(icon, color: Colors.black),
@@ -186,18 +176,25 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Text(
                 text,
                 style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w300),
+                  fontSize: 20.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ),
           ),
           currentUser.id == widget.profileId
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
-                  onPressed: () => text == 'Experience' ? modalSheetFunction(EditExperience(profileId: currentUser.id)) :
-                 modalSheetFunction(EditEducation(profileId: currentUser.id)) //editTimeline(text),
-                )
+                  onPressed: () => text == 'Experience'
+                      ? modalSheetFunction(
+                          EditExperience(profileId: currentUser.id))
+                      : modalSheetFunction(
+                          EditEducation(
+                            profileId: currentUser.id,
+                          ),
+                        ) //editTimeline(text),
+                  )
               : Icon(icon, color: Colors.black),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
@@ -208,22 +205,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   buildContactInfo() {
-    return FutureBuilder(
-      future: usersRef.document(widget.profileId).get(),
-      builder: (ctx, snapshot) {
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator();
-        }
-        User user = User.fromDocument(snapshot.data);
-        return Padding(
-          padding: const EdgeInsets.only(top: 12.0),
-          child: Column(
-            children: <Widget>[
-              contactInfo('Email', user.email),
-            ],
-          ),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.only(top: 12.0),
+      child: Column(
+        children: <Widget>[
+          contactInfo('Email', profile.email),
+        ],
+      ),
     );
   }
 
@@ -251,9 +239,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text(
                   email,
                   style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w400),
+                    fontSize: 16.0,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
             ],
@@ -264,45 +253,36 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   buildAboutUser() {
-    return FutureBuilder(
-      future: usersRef.document(widget.profileId).get(),
-      builder: (ctx, snapshot) {
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator();
-        }
-        User user = User.fromDocument(snapshot.data);
-        return Padding(
-          padding: const EdgeInsets.only(top: 12.0),
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(top: 12.0),
+      child: Column(
+        children: <Widget>[
+          Row(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 20),
-                  ),
-                  Expanded(
-                    child: Text(
-                      user.bio,
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                  ),
-                ],
-              ),
               Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  bottom: 8.0,
-                ),
-                child: Divider(
-                  thickness: 2,
+                padding: EdgeInsets.only(left: 20),
+              ),
+              Expanded(
+                child: Text(
+                  profile.bio,
+                  style: TextStyle(fontSize: 18.0),
                 ),
               ),
-              _buildTopHeader('Area of Work', Icons.desktop_windows),
-              buildAreaOfWork(),
             ],
           ),
-        );
-      },
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 8.0,
+              bottom: 8.0,
+            ),
+            child: Divider(
+              thickness: 2,
+            ),
+          ),
+          _buildTopHeader('Area of Work', Icons.desktop_windows),
+          buildAreaOfWork(),
+        ],
+      ),
     );
   }
 
@@ -548,36 +528,6 @@ class _ProfilePageState extends State<ProfilePage> {
     getFollowing();
   }
 
-  // handlefollowUser() {
-  //   setState(() {
-  //     isFollowing = true;
-  //   });
-  //   followersRef
-  //       .document(widget.profileId)
-  //       .collection('userFollowers')
-  //       .document(currentUser.id)
-  //       .setData({});
-  //   followingRef
-  //       .document(currentUser.id)
-  //       .collection('userFollowing')
-  //       .document(widget.profileId)
-  //       .setData({});
-  //   activityFeedRef
-  //       .document(widget.profileId)
-  //       .collection('feedItems')
-  //       .document(currentUser.id)
-  //       .setData({
-  //     'type': 'follow',
-  //     'ownerId': widget.profileId,
-  //     'userId': currentUser.id,
-  //     'username': currentUser.firstName,
-  //     'userProfileImg': currentUser.photoUrl,
-  //     'timestamp': timestamp,
-  //   });
-  //   getFollowers();
-  //   getFollowing();
-  // }
-
   handlefollowUser() {
     setState(() {
       isRequested = true;
@@ -589,74 +539,39 @@ class _ProfilePageState extends State<ProfilePage> {
         .setData({});
   }
 
-  buildUserInterests() {
-    return Container(
-      height: 44,
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int i) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(33),
-              border: Border.all(
-                color: Colors.white12,
-              ),
-            ),
-            margin: EdgeInsets.only(right: 13),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 10.0,
-                bottom: 5,
-                right: 20,
-                left: 20,
-              ),
-              child: Text(
-                tags[i],
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          );
-        },
-        itemCount: tags.length,
-        scrollDirection: Axis.horizontal,
-      ),
-    );
-  }
-
   @override
   void initState() {
-    // Education experience = Education(
-    //   title: 'Class 10th',
-    //   institute: 'DPS RKPURAM',
-    //   description: 'Science',
-    //   active: true,
-    //   date: 'Since 2018',
-    // );
-    // final exp = experience.toMap();
-    // usersRef.document(widget.profileId).updateData({
-    //   'educations': [exp]
-    // });
+    isCurrentUser = widget.profileId == currentUser.id;
+    if (!isCurrentUser) {
+      setState(() {
+        gotData = false;
+      });
+    }
+    if (!gotData) {
+      getUser();
+      getProject();
+    }
     getFollowers();
-    getProject();
     getFollowing();
-    getInterests();
     checkIfRequested();
-    getEducation();
-    getExperience();
-    getUser();
     checkIfFollowing();
     super.initState();
   }
 
-  getUser() async {
+  Future<void> getUser() async {
     setState(() {
       isLoading = true;
     });
     DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
     profile = User.fromDocument(doc);
+    getInterests();
+    getEducation();
+    getExperience();
     setState(() {
       isLoading = false;
+      if (isCurrentUser) {
+        gotData = true;
+      }
     });
   }
 
@@ -694,7 +609,6 @@ class _ProfilePageState extends State<ProfilePage> {
         .document(widget.profileId)
         .collection('userFollowing')
         .getDocuments();
-    // print(doc.documents.length);
     setState(() {
       followingCount = doc.documents.length;
     });
@@ -727,9 +641,7 @@ class _ProfilePageState extends State<ProfilePage> {
       isLoading = true;
     });
     interests = [];
-    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
-    User user = User.fromDocument(doc);
-    user.areaOfWork.forEach((element) {
+    profile.areaOfWork.forEach((element) {
       interests.add(element.toString());
     });
     setState(() {
@@ -742,9 +654,7 @@ class _ProfilePageState extends State<ProfilePage> {
       isLoading = true;
     });
     experiences = [];
-    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
-    User user = User.fromDocument(doc);
-    user.experiences.forEach((element) {
+    profile.experiences.forEach((element) {
       Experience exp = Experience(
         date: element['date'],
         description: element['description'],
@@ -764,9 +674,7 @@ class _ProfilePageState extends State<ProfilePage> {
       isLoading = true;
     });
     educations = [];
-    DocumentSnapshot doc = await usersRef.document(widget.profileId).get();
-    User user = User.fromDocument(doc);
-    user.educations.forEach((element) {
+    profile.educations.forEach((element) {
       Education edu = Education(
         date: element['date'],
         description: element['description'],
@@ -782,10 +690,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> refresh() async {
-    getEducation();
-    getExperience();
-    getInterests();
     getProject();
+    getUser();
   }
 
   AppBar appBar() {
@@ -809,7 +715,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void choiceAction(String choice) {
-    // print(choice);
     if (choice == 'Create New Project') {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -822,7 +727,6 @@ class _ProfilePageState extends State<ProfilePage> {
       widget.onSignedOut();
     } else {
       String id = project[choice];
-      // print(id);
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ProjectPage(
@@ -857,7 +761,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: appBar(),
       body: isLoading == true
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               child: Stack(
                 children: <Widget>[
@@ -875,7 +779,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: buildProfileData(),
                       ),
-                      buildUserInterests(),
                       Expanded(
                         child: Container(
                           width: double.infinity,
@@ -904,9 +807,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             _buildTopHeader('About', Icons.person_outline),
                             buildAboutUser(),
                             buildDivider(),
-                            // _buildPostHeader('Posts'),
-                            // buildProfilePosts(),
-                            // buildDivider(),
                             _buildTimelineHeader(
                                 'Experience', MdiIcons.briefcaseOutline),
                             Padding(
