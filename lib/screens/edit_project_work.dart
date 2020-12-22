@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/project.dart';
+import 'package:reachout/models/constants.dart';
 
 class EditProjectWork extends StatefulWidget {
   final String projectId;
@@ -85,8 +86,27 @@ class _EditProjectWorkState extends State<EditProjectWork> {
       key: _tagKey,
       itemCount: tags.length,
       columns: 3,
-      textField: TagsTextField(
+      // textField: singlelineTextField('Enter 1 Word Tag', null),
+      textField:    TagsTextField(
         hintText: 'Enter 1 word tags',
+        inputDecoration: InputDecoration(
+          focusColor: Colors.red,
+          //hintText: text,
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0))),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black, width: 2.0),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)))
+
+
+
+        ),
         textStyle: TextStyle(
           fontSize: 14,
         ),
