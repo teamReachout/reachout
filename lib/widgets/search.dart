@@ -59,10 +59,11 @@ class Search extends SearchDelegate<dynamic> {
   @override
   Widget buildSuggestions(BuildContext context) {
     getData();
-    final suggestionList =
-        data.where((e) => e.firstName.startsWith(query)).toList();
-    if (suggestionList.isEmpty) {
-      return Text('Search...');
+    final suggestionList = data
+        .where((e) => e.firstName.toLowerCase().startsWith(query.toLowerCase()))
+        .toList();
+    if (suggestionList.isEmpty || (query.length == 0)) {
+      return Center(child: Text('Search...'));
     } else {
       return ListView.builder(
         itemBuilder: (ctx, i) => ListTile(

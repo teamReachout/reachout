@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/widgets/appbar.dart';
+import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:reachout/widgets/post.dart';
 
 class UserFeed extends StatefulWidget {
@@ -33,7 +34,7 @@ class _UserFeedState extends State<UserFeed> {
 
   buildTimeline() {
     if (timelinePosts == null) {
-      return CircularProgressIndicator();
+      return LoadingIndicator();
     } else if (timelinePosts.isEmpty) {
       return Text('Follow Users');
     } else {
