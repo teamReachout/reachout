@@ -11,6 +11,8 @@ import 'package:reachout/widgets/notification_item.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:reachout/screens/requests_page.dart';
 
+//THIS IS A TEST TO CHECK GITHUB OUT CAUSE WHY NOT OSOMEONE STOP ME FROM TYPONG CAUSE NOW I'M WASTING TIME
+
 class Notifications extends StatefulWidget {
   @override
   _NotificationsState createState() => _NotificationsState();
