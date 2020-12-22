@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/models/constants.dart';
 import 'package:reachout/models/project.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/edit_project.dart';
@@ -11,6 +13,7 @@ import 'package:reachout/screens/edit_project_members.dart';
 import 'package:reachout/screens/edit_projects_posts.dart';
 import 'package:reachout/widgets/interests.dart';
 import 'package:reachout/widgets/user_card.dart';
+import 'package:flutter/services.dart';
 
 class ProjectPage extends StatefulWidget {
   final String projectId;
@@ -134,7 +137,7 @@ class _ProjectPageState extends State<ProjectPage> {
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 15.0),
+              padding: const EdgeInsets.only(left: 14.0),
               child: Text(
                 text,
                 style: TextStyle(
@@ -148,9 +151,16 @@ class _ProjectPageState extends State<ProjectPage> {
           currentUser.id == widget.profileId
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
-                  onPressed:
-                      text == 'Area of Work' ? editAreaOfWork : editSection,
-                )
+                  onPressed: text == 'Area of Work'
+                      ? editAreaOfWork //() {
+                      //modalSheetFunction(
+                      //EditProjectWork(projectId: currentUser.id));
+                      //}
+                      : () {
+                          modalSheetFunction(
+                              EditProject(projectId: currentUser.id));
+                        } //editAreaOfWork : editSection,
+                  )
               : Icon(icon, color: Colors.black),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
@@ -301,19 +311,18 @@ class _ProjectPageState extends State<ProjectPage> {
         }
         Project project = Project.fromDocument(snapshot.data);
         return Padding(
-          padding: const EdgeInsets.only(top: 12.0),
+          padding: const EdgeInsets.only(top: 8.0),
           child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 14),
                   ),
                   Expanded(
-                    child: Text(
-                      project.bio,
-                      style: TextStyle(fontSize: 18.0),
-                    ),
+                    child: Text(project.bio,
+                        style: GoogleFonts.quicksand(
+                            fontSize: 15, fontWeight: FontWeight.w500)),
                   ),
                 ],
               ),
@@ -349,14 +358,13 @@ class _ProjectPageState extends State<ProjectPage> {
               Row(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 14),
                   ),
                   Expanded(
-                    child: Text(
-                      project.why,
-                      // 'HELOO',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
+                    child: Text(project.why,
+                        // 'HELOO',
+                        style: GoogleFonts.quicksand(
+                            fontSize: 15, fontWeight: FontWeight.w500)),
                   ),
                 ],
               ),
@@ -413,33 +421,41 @@ class _ProjectPageState extends State<ProjectPage> {
   }
 
   buildProfileHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 28.0, top: 7),
-          child: CircleAvatar(
-            radius: 48, //changed from 64
-            backgroundImage: NetworkImage(proj.photoUrl),
+    return Padding(
+      padding: EdgeInsets.only(top: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 28.0, top: 7),
+            child: CircleAvatar(
+              radius: 48, //changed from 64
+              backgroundImage: NetworkImage(proj.photoUrl),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 38.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                proj.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 48,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(left: 34.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(proj.name.toUpperCase(),
+                    style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 36,
+                        color: Colors.white,
+                        letterSpacing: 0.5)
+                    // style: TextStyle(
+                    //   fontWeight: FontWeight.bold,
+                    //   fontSize: 48,
+                    //   color: Colors.white,
+                    //   letterSpacing: 0.5
+                    // ),
+                    ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -485,15 +501,15 @@ class _ProjectPageState extends State<ProjectPage> {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
-            Radius.circular(33),
+            Radius.circular(16),
           ),
           color: Colors.transparent,
           border: Border.all(
-            color: Colors.blue,
+            color: Colors.black,
           ),
         ),
         child: Text(
-          text,
+          text.toUpperCase(),
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -753,121 +769,259 @@ class _ProjectPageState extends State<ProjectPage> {
     });
   }
 
+  modalSheetFunction(Widget editWidget) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return editWidget; //EditProfile(profileId: currentUser.id);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent //Color(0xFFff9d72),
+          ),
+    );
     return Scaffold(
-      appBar: appBar(),
+      backgroundColor: Colors.white,
+      // appBar: appBar(),
+      // appBar: AppBar(
+      //   backgroundColor: Color(0xFFa7c5eb)
+      // ),
       body: isLoading == true
           ? CircularProgressIndicator()
           : RefreshIndicator(
               child: Stack(
                 overflow: Overflow.clip,
+                alignment: Alignment.center,
+                // fit: StackFit.expand,
                 // alignment: AlignmentDirectional.bottomCenter,
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      buildProfileHeader(),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 38,
-                          left: 38,
-                          top: 15,
-                          bottom: 12,
-                        ),
-                        child: buildProfileData(),
-                      ),
-                      Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.only(
-                            top: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xffefefef),
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(34),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   DraggableScrollableSheet(
-                    
                     builder: (ctx, controller) {
                       return Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffefefef),
-                        ),
+                        // decoration: BoxDecoration(
+                        //    borderRadius: BorderRadius.circular(30.0),
+                        //   color: Color(0xffefefef),
+                        // color: Colors.white,
+                        // ),
                         child: ListView(
                           controller: controller,
                           children: <Widget>[
-                            _buildTopHeader(
-                                'Area of Work', Icons.desktop_windows),
-                            buildAreaOfWork(),
-                            Divider(
-                              thickness: 2,
-                            ),
-                            _buildTopHeader('About', Icons.person_outline),
-                            buildAboutProject(),
-                            buildDivider(),
-                            _buildTopHeader(
-                                'Why we Started', Icons.person_outline),
-                            buildWhyProject(),
-                            Divider(
-                              thickness: 2,
-                            ),
-                            _buildPostHeader('Posts', Icons.photo_album),
-                            Container(
-                              height: 500,
-                              width: 500,
-                              child: ScrollSnapList(
-                                onItemFocus: _onItemFocus,
-                                itemSize: 0,
-                                itemBuilder: _buildPostItem,
-                                itemCount: posts.length,
-                                reverse: true,
+                            // Container(
+                            //   width: double.infinity,
+                            //   height: 50,
+                            //   color: Colors.red
+                            // ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0.0),
+                              child: Card(
+                                elevation: 0.5,
+                                color: Colors.grey[200],
+                                child: Column(
+                                  children: [
+                                    _buildTopHeader(
+                                        'Area of Work', Icons.desktop_windows),
+                                    Divider(
+                                      thickness: 1,
+                                      endIndent:
+                                          MediaQuery.of(context).size.width *
+                                              0.5,
+                                      indent: 5,
+                                      color: Colors.black12,
+                                    ),
+                                    Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: buildAreaOfWork()),
+                                  ],
+                                ),
                               ),
                             ),
-                            buildDivider(),
-                            _buildTimelineHeader(
-                              'Founders',
-                              MdiIcons.briefcaseOutline,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  buildFounders(),
+                            // buildAreaOfWork(),
+                            // Divider(
+                            //   thickness: 2,
+                            // ),
+                            Card(
+                              elevation: 0.5,
+                              color: Colors.grey[200],
+                              child: Column(
+                                children: [
+                                  _buildTopHeader(
+                                      'About', Icons.person_outline),
+                                  Divider(
+                                    thickness: 1,
+                                    endIndent:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    indent: 5,
+                                    color: Colors.black12,
+                                  ),
+                                  buildAboutProject(),
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 8.0,
-                                bottom: 8.0,
-                              ),
-                              child: Divider(
-                                thickness: 2,
-                              ),
-                            ),
-                            _buildTimelineHeader(
-                              'Collaborators',
-                              MdiIcons.schoolOutline,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  buildCollaborator(),
+                            // buildAboutProject(),
+
+                            //buildDivider(),
+                            Card(
+                              elevation: 0.5,
+                              color: Colors.grey[200],
+                              child: Column(
+                                children: [
+                                  _buildTopHeader(
+                                      'Our Story', Icons.person_outline),
+                                  Divider(
+                                    thickness: 1,
+                                    endIndent:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    indent: 5,
+                                    color: Colors.black12,
+                                  ),
+                                  buildWhyProject(),
                                 ],
                               ),
                             ),
-                            buildDivider(),
-                            _buildTopHeader('Contact', Icons.phone),
-                            buildContactInfo(),
+                            // buildWhyProject(),
+                            // Divider(
+                            //   thickness: 2,
+                            // ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 12.0),
+                              child: Card(
+                                elevation: 0.5,
+                                color: Colors.grey[200],
+                                child: Column(
+                                  children: [
+                                    _buildPostHeader(
+                                        'Posts', Icons.photo_album),
+                                    Container(
+                                      color: Colors.grey[100],
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ScrollSnapList(
+                                        onItemFocus: _onItemFocus,
+                                        itemSize: 100,
+                                        itemBuilder: _buildPostItem,
+                                        itemCount: posts.length,
+                                        reverse: true,
+                                        onReachEnd: null,
+                                        // dynamicItemSize: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            // buildDivider(),
+                            // Card(
+                            //   // color: Colors.grey[200],
+                            //   child: Column(
+                            //     children: [
+                            //       _buildTimelineHeader(
+                            //         'Founders',
+                            //         MdiIcons.briefcaseOutline,
+                            //       ),
+                            //       Padding(
+                            //         padding: const EdgeInsets.only(top: 8.0),
+                            //         child: Stack(
+                            //           children: <Widget>[
+                            //             buildFounders(),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            Card(
+                              // color: Colors.grey[200],
+                              child: Column(
+                                children: [
+                                  _buildTimelineHeader(
+                                    'Founders',
+                                    MdiIcons.briefcaseOutline,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        buildFounders(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 8.0),
+                            //   child: Stack(
+                            //     children: <Widget>[
+                            //       buildFounders(),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(
+                            //     top: 8.0,
+                            //     bottom: 8.0,
+                            //   ),
+                            //   child: Divider(
+                            //     thickness: 2,
+                            //   ),
+                            // ),
+
+                            Card(
+                              color: Colors.grey[200],
+                              child: Column(
+                                children: [
+                                  _buildTimelineHeader(
+                                    'Collaborators',
+                                    MdiIcons.schoolOutline,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        buildCollaborator(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 20.0),
+                            //   child: Stack(
+                            //     children: <Widget>[
+                            //       buildCollaborator(),
+                            //     ],
+                            //   ),
+                            // ),
+                            // buildDivider(),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8.0),
+                              child: Card(
+                                color: Colors.grey[200],
+                                child: Column(
+                                  children: [
+                                    _buildTopHeader('Contact', Icons.phone),
+                                    buildContactInfo(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // buildContactInfo(),
                           ],
                         ),
                       );
@@ -876,6 +1030,60 @@ class _ProjectPageState extends State<ProjectPage> {
                     minChildSize: 0.725,
                     expand: true,
                     maxChildSize: 1,
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xFFa7c5eb),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.zero,
+                                topRight: Radius.zero,
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(
+                                    20)) //(Radius.zero, Radius.zero, Radius.circular(10), Radius.circular(10)),
+                            ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            buildProfileHeader(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 38,
+                                left: 38,
+                                top: 15,
+                                bottom: 18,
+                              ),
+                              child: buildProfileData(),
+                            ),
+                            // SizedBox(
+                            //   width: double.infinity,
+                            //   height: 100,
+                            // )
+                            // Expanded(
+                            //   child: Container(
+                            //     width: double.infinity,
+                            //     margin: EdgeInsets.only(
+                            //       top: 15,
+                            //     ),
+                            //     decoration: BoxDecoration(
+                            //       color: Color(0xffefefef),
+                            //       borderRadius: BorderRadius.vertical(
+                            //         top: Radius.circular(34),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
