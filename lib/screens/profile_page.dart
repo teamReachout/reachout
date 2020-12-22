@@ -14,6 +14,9 @@ import 'package:reachout/screens/edit_profile.dart';
 import 'package:reachout/widgets/education_row.dart';
 import 'package:reachout/widgets/experience_row.dart';
 import 'package:reachout/widgets/interests.dart';
+import 'package:reachout/models/constants.dart';
+import 'package:reachout/screens/edit_profile.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfilePage extends StatefulWidget {
   final String profileId;
@@ -115,6 +118,22 @@ class _ProfilePageState extends State<ProfilePage> {
         .then((value) => setState(() {}));
   }
 
+  modalSheetFunction(Widget editWidget) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return editWidget;//EditProfile(profileId: currentUser.id);
+      },
+    );
+  }
+
   Widget _buildTopHeader(String text, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -138,9 +157,12 @@ class _ProfilePageState extends State<ProfilePage> {
           currentUser.id == widget.profileId
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
-                  onPressed:
-                      text == 'Area of Work' ? editAreaOfWork : editSection,
-                )
+                  onPressed: text == 'Area of Work'
+                      ? editAreaOfWork
+                      : () {
+                          modalSheetFunction(EditProfile(profileId: currentUser.id));
+                        } //editSection //modalSheetFunction(context)
+                  )
               : Icon(icon, color: Colors.black),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
@@ -173,7 +195,8 @@ class _ProfilePageState extends State<ProfilePage> {
           currentUser.id == widget.profileId
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
-                  onPressed: () => editTimeline(text),
+                  onPressed: () => text == 'Experience' ? modalSheetFunction(EditExperience(profileId: currentUser.id)) :
+                 modalSheetFunction(EditEducation(profileId: currentUser.id)) //editTimeline(text),
                 )
               : Icon(icon, color: Colors.black),
           Padding(

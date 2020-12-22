@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/models/constants.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/comments.dart';
 import 'package:reachout/screens/profile_page.dart';
@@ -77,13 +78,21 @@ class _PostState extends State<Post> {
   final String location;
   final String description;
   final String mediaUrl;
+  String reachoutMessage;
   bool showHeart = false;
   int likeCount;
   int commentCount = 0;
   Map likes;
   bool isLiked;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _reachoutKey = GlobalKey<FormState>();
   TextEditingController commentController = TextEditingController();
+  String reachoutAns1;
+  String reachoutAns2;
+  String reachoutAns3;
+  String reachoutQ1 = 'Why are you reaching out?';
+  String reachoutQ2 = 'What is your current market share?';
+  String reachoutQ3 = 'Why is it worth my time?';
   _PostState({
     this.postId,
     this.ownerId,
@@ -185,13 +194,10 @@ class _PostState extends State<Post> {
                 child: Text(
                   user.firstName,
                   style: GoogleFonts.lato(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      letterSpacing: 0.5),
-                  // style: TextStyle(
-                  //   color: Colors.black,
-                  //   fontWeight: FontWeight.bold,
-                  //   ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
               subtitle: Text(location),
@@ -213,16 +219,6 @@ class _PostState extends State<Post> {
                   : Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        // // Container(
-                        // //   child: Text(
-                        // //     '$username',
-                        // //     style: TextStyle(
-                        // //       color: Colors.black,
-                        // //       fontWeight: FontWeight.bold,
-                        // //     ),
-                        // //   ),
-                        // // ),
-                        // Text(' '),
                         Expanded(
                           child: ReadMoreText(
                             description,
@@ -323,19 +319,18 @@ class _PostState extends State<Post> {
           // width: data.width,
           // height: data.height * 0.7,
           decoration: BoxDecoration(boxShadow: kElevationToShadow[3]
-          // [BoxShadow(
-          //   color: Colors.black,
-          // )]
-          ),
+              // [BoxShadow(
+              //   color: Colors.black,
+              // )]
+              ),
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: mediaUrl,
-                // fit: BoxFit.fill,
-                // width: data.width,
-                height: data.height * 0.7
-              ),
+                  imageUrl: mediaUrl,
+                  // fit: BoxFit.fill,
+                  // width: data.width,
+                  height: data.height * 0.7),
             ],
           ),
         ),
@@ -391,6 +386,188 @@ class _PostState extends State<Post> {
     getCommentCount();
   }
 
+  Widget reachoutForm() {
+    return Form(
+      key: _reachoutKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(reachoutQ1),
+          Flexible(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.trim() == '') {
+                  return "";
+                }
+                return null;
+              },
+              onSaved: (value) {
+                reachoutAns1 = value;
+              },
+              maxLines: 5,
+              minLines: 3,
+              autocorrect: true,
+              maxLength: 200,
+              decoration: kInputDecoration,
+            ),
+          ),
+          Text(reachoutQ2),
+          Flexible(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.trim() == '') {
+                  return "";
+                }
+                return null;
+              },
+              onSaved: (value) {
+                reachoutAns2 = value;
+              },
+              maxLines: 5,
+              minLines: 3,
+              autocorrect: true,
+              maxLength: 200,
+              decoration: kInputDecoration
+            ),
+          ),
+          Text(reachoutQ3),
+          Flexible(
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.trim() == '') {
+                  return "";
+                }
+                return null;
+              },
+              onSaved: (value) {
+                reachoutAns3 = value;
+              },
+              maxLines: 5,
+              minLines: 3,
+              autocorrect: true,
+              maxLength: 200,
+              decoration: kInputDecoration,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  handleReachout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'ReachOut Form',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height *0.6,
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: Column(
+                  children: [
+                    Flexible(
+                      flex: 4,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: reachoutForm(),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FlatButton(
+                            onPressed: reachout,
+                            child: Text(
+                              'SEND',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          FlatButton(
+                            onPressed: leaveReachout,
+                            child: Text(
+                              'CANCEL',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        );
+      },
+    );
+  }
+
+  leaveReachout() {
+    _reachoutKey.currentState.reset();
+    Navigator.of(context).pop();
+  }
+
+  reachout() {
+    _reachoutKey.currentState.save();
+    print(reachoutAns1);
+    bool isValid = _reachoutKey.currentState.validate();
+    if (isValid) {
+      reachoutMessage =
+          'This is a Reachout message from ${currentUser.firstName} ${currentUser.lastName}\n\n';
+      String textMessage = reachoutMessage +
+          reachoutQ1 +
+          ':\n' +
+          reachoutAns1 +
+          '\n\n' +
+          reachoutQ2 +
+          ':\n' +
+          reachoutAns2 +
+          '\n\n' +
+          reachoutQ3 +
+          ':\n' +
+          reachoutAns3;
+      messagesRef
+          .document(currentUser.id)
+          .collection('userChats')
+          .document(ownerId)
+          .collection('userMessages')
+          .add({
+        'sender': currentUser.id,
+        'text': textMessage,
+        'receiver': ownerId,
+      });
+      messagesRef
+          .document(ownerId)
+          .collection('userChats')
+          .document(currentUser.id)
+          .collection('userMessages')
+          .add({
+        'sender': currentUser.id,
+        'text': textMessage,
+        'receiver': ownerId,
+      });
+      leaveReachout();
+    }
+  }
+
   buildPostFooter(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -428,7 +605,7 @@ class _PostState extends State<Post> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => handleReachout(context),
                 child: Icon(
                   MdiIcons.contactsOutline, // Reachout button
                   size: 28,
@@ -491,40 +668,6 @@ class _PostState extends State<Post> {
             ),
           ],
         ),
-        // Padding(
-        //   padding: const EdgeInsets.only(
-        //     left: 20,
-        //     top: 6,
-        //     bottom: 6,
-        //   ),
-        //   child: mediaUrl.trim() == ''
-        //       ? null
-        //       : Row(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: <Widget>[
-        //             Container(
-        //               child: Text(
-        //                 '$username',
-        //                 style: TextStyle(
-        //                   color: Colors.black,
-        //                   fontWeight: FontWeight.bold,
-        //                 ),
-        //               ),
-        //             ),
-        //             Text(' '),
-        //             Expanded(
-        //               child: ReadMoreText(
-        //                 description,
-        //                 trimLines: 2,
-        //                 colorClickableText: Colors.grey,
-        //                 trimMode: TrimMode.Line,
-        //                 trimCollapsedText: '...Show more',
-        //                 trimExpandedText: ' show less',
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        // ),
         ListTile(
           title: Padding(
             padding: const EdgeInsets.only(
@@ -638,13 +781,6 @@ class _PostState extends State<Post> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-            //   child: Divider(
-            //     color: Color.fromRGBO(217, 217, 217, 1),
-            //     thickness: 10,
-            //   ),
-            // ),
           ],
         ),
       ),

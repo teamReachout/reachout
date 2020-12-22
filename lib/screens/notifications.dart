@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/models/constants.dart';
 import 'package:reachout/screens/requests_page.dart';
 import 'package:reachout/widgets/appbar.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
@@ -63,13 +64,15 @@ class _NotificationsState extends State<Notifications> {
             padding: EdgeInsets.fromLTRB(0, 5.0, 6.0, 6.0),
             alignment: Alignment.centerRight,
             child: OutlinedButton(
-              onPressed: goToRequests,
+              // onPressed: 
+              onPressed:  goToRequests,
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
-                  // elevation: MaterialStateProperty.all(2.0),
-                  padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
-                  shape: MaterialStateProperty.all(ContinuousRectangleBorder(borderRadius: BorderRadius.circular(2))),
-                  ),
+                backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
+                // elevation: MaterialStateProperty.all(2.0),
+                padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
+                shape: MaterialStateProperty.all(ContinuousRectangleBorder(
+                    borderRadius: BorderRadius.circular(2))),
+              ),
               child: Text(
                 'YOUR REQUESTS',
                 style: GoogleFonts.roboto(
@@ -79,8 +82,7 @@ class _NotificationsState extends State<Notifications> {
                     color: Colors.white),
               ),
             ),
-          )
-          ,
+          ),
           Flexible(
             child: Container(
               child: FutureBuilder(
