@@ -64,9 +64,9 @@ class NotificationItem extends StatelessWidget {
       mediaPreview = Text('');
     }
     if (type == 'like') {
-      previewText = "Liked your post";
+      previewText = " Liked your post";
     } else if (type == 'follow') {
-      previewText = "is following you";
+      previewText = " is following you";
     } else {
       previewText = "Comment: $commentData";
     }
@@ -91,7 +91,7 @@ class NotificationItem extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: username + ' ',
+                    text: username,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

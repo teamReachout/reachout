@@ -3,6 +3,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/auth.dart';
+import 'package:reachout/models/education.dart';
+import 'package:reachout/models/experience.dart';
 import 'package:reachout/screens/notifications.dart';
 import 'package:reachout/screens/opportunities.dart';
 import 'package:reachout/screens/upload.dart';
@@ -24,8 +26,17 @@ final messagesRef = Firestore.instance.collection('messages');
 final requestsRef = Firestore.instance.collection('requests');
 final storageRef = FirebaseStorage.instance.ref();
 final timestamp = DateTime.now();
-
-User currentUser;
+bool gotData = false;
+User currentUser; // Current User
+List<String> interests = [];
+bool isFollowing = false;
+bool isRequested = false;
+int followerCount = 0;
+int followingCount = 0;
+User profile; // Profile Page visiting
+List<Experience> experiences = [];
+List<Education> educations = [];
+Map<String, String> project = {};
 
 class Home extends StatefulWidget {
   final BaseAuth auth;
