@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -7,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:image/image.dart' as Im;
+import 'package:reachout/models/constants.dart';
+import 'package:reachout/widgets/loading_indicator.dart';
 import 'dart:io';
 import 'package:uuid/uuid.dart';
 import '../home.dart';
@@ -154,397 +155,149 @@ class _UploadState extends State<Upload> {
               ),
             ),
             actions: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Colors.purple[300],
-                ),
-                child: FlatButton(
-                  onPressed: captionController.text == null
-                      ? null
-                      : isUploading
-                          ? null
-                          : () => handleSubmit(),
-                  child: Text(
-                    'POST',
-                    style: TextStyle(
-                      color: Color.fromRGBO(244, 248, 245, 1),
-                      fontWeight: FontWeight.normal,
-                      letterSpacing: 2.0,
-                      fontSize: 15,
-                    ),
+              FlatButton(
+                onPressed: captionController.text == null
+                    ? null
+                    : isUploading
+                        ? null
+                        : () => handleSubmit(),
+                child: Text(
+                  'POST',
+                  style: TextStyle(
+                    color: Color.fromRGBO(244, 248, 245, 1),
+                    fontWeight: FontWeight.normal,
+                    letterSpacing: 2.0,
+                    fontSize: 15,
                   ),
                 ),
               ),
             ],
             primary: true,
-            // title: Text(
-            //   'UPLOAD',
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.bold,
-            //     color: Color.fromRGBO(244, 248, 245, 1),
-            //   ),
-            // ),
           ),
         ),
         preferredSize: Size.fromHeight(44),
       ),
       body: isUploading
-          ? CircularProgressIndicator()
+          ? LoadingIndicator()
           : Padding(
               padding: EdgeInsets.only(top: 0.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(
-                          currentUser.photoUrl,
-                        ),
-                      ),
-                      title: Container(
-                        // width: 250,
-                        child: Text(
-                            currentUser.firstName + " " + currentUser.lastName),
-                      ),
-                      tileColor: Colors.grey[100],
-                    ),
-                  ),
-                  // Divider(
-                  //   color: Color.fromRGBO(89, 89, 89, 1),
-                  //   thickness: 2,
-                  //   indent: 45,
-                  //   endIndent: 45,
-                  // ),
-                  file == null
-                      ? Container()
-                      : Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Container(
-                              child: Center(
-                                child: Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    image: file == null
-                                        ? null
-                                        : DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image: FileImage(file),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(5.0, 8.0, 5.0, 0.0),
-                    child: Card(
-                      child: Container(
-                        decoration: BoxDecoration(color: Colors.grey[200]),
-                        child: ListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  key: _formKey,
-                                  autocorrect: true,
-                                  minLines: 1,
-                                  maxLines: 5,
-                                  cursorColor: Color.fromRGBO(89, 89, 89, 1),
-                                  keyboardType: TextInputType.text,
-                                  style: TextStyle(fontSize: 20),
-                                  controller: captionController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter Caption',
-                                    border: InputBorder.none,
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              key: _formKey,
+                              autocorrect: true,
+                              minLines: 1,
+                              maxLines: 5,
+                              cursorColor: Color.fromRGBO(89, 89, 89, 1),
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              style: TextStyle(fontSize: 20),
+                              controller: captionController,
+                              decoration: InputDecoration(
+                                hintText: 'Idea for the day...',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                icon: Icon(Icons.photo_library),
-                                onPressed: handleChooseFromGallery,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          IconButton(
+                            icon: Icon(Icons.photo_library),
+                            onPressed: handleChooseFromGallery,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  // Card(
-                  //   child: ListTile(
-                  //     leading: Icon(
-                  //       Icons.pin_drop,
-                  //       color: Theme.of(context).primaryColor,
-                  //       size: 35,
-                  //     ),
-                  //     title: Container(
-                  //       width: 250,
-                  //       child: TextField(
-                  //         controller: locationController,
-                  //         decoration: InputDecoration(
-                  //           hintText: 'Location',
-                  //           border: InputBorder.none,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     trailing: CircleAvatar(
-                  //       backgroundColor: Color.fromRGBO(244, 248, 245, 1),
-                  //       radius: 25,
-                  //       child: IconButton(
-                  //         onPressed: getUserLocation,
-                  //         icon: Icon(
-                  //           Icons.my_location,
-                  //           color: Theme.of(context).primaryColor,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(bottom: 10.0),
-                  //   child: Tags(
-                  //     key: _tagKey,
-                  //     itemCount: tags.length,
-                  //     columns: 3,
-                  //     textField: TagsTextField(
-                  //       hintText: 'Enter 1 word tags',
-                  //       textStyle: TextStyle(
-                  //         fontSize: 14,
-                  //       ),
-                  //       onSubmitted: (tag) {
-                  //         if (tag.split(' ').length == 1) {
-                  //           setState(() {
-                  //             tags.add(
-                  //               Item(
-                  //                 title: tag,
-                  //               ),
-                  //             );
-                  //           });
-                  //         }
-                  //       },
-                  //     ),
-                  //     itemBuilder: (i) {
-                  //       final Item currentItem = tags[i];
-                  //       return ItemTags(
-                  //         index: i,
-                  //         title: currentItem.title,
-                  //         customData: currentItem.customData,
-                  //         textStyle: TextStyle(fontSize: 14),
-                  //         combine: ItemTagsCombine.withTextBefore,
-                  //         onPressed: null,
-                  //         onLongPressed: null,
-                  //         removeButton: ItemTagsRemoveButton(
-                  //           onRemoved: () {
-                  //             setState(() {
-                  //               tags.removeAt(i);
-                  //             });
-                  //             return true;
-                  //           },
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  // file == null ? Container() :
-                  // Expanded(
-                  //   child: Container(
-                  //     child: Center(
-                  //       child: Container(
-                  //         width: double.infinity,
-                  //         decoration: BoxDecoration(
-                  //           image: file == null
-                  //               ? null
-                  //               : DecorationImage(
-                  //                   fit: BoxFit.contain,
-                  //                   image: FileImage(file),
-                  //                 ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Tags(
-                              key: _tagKey,
-                              itemCount: tags.length,
-                              columns: 3,
-                              textField: TagsTextField(
-                                hintText: 'Enter 1 word tags',
-                                textStyle: TextStyle(
-                                  fontSize: 14,
-                                ),
-                                inputDecoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    // borderSide: BorderSide.none,
-                                  ),
-                                ),
-                                onSubmitted: (tag) {
-                                  if (tag.split(' ').length == 1) {
-                                    setState(() {
-                                      tags.add(
-                                        Item(
-                                          title: tag,
-                                        ),
-                                      );
-                                    });
-                                  }
-                                },
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      child: Tags(
+                        key: _tagKey,
+                        itemCount: tags.length,
+                        columns: 3,
+                        textField: TagsTextField(
+                          hintText: 'Enter 1 word tags',
+                          textStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                          inputDecoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
                               ),
-                              itemBuilder: (i) {
-                                final Item currentItem = tags[i];
-                                return ItemTags(
-                                  index: i,
-                                  title: currentItem.title,
-                                  customData: currentItem.customData,
-                                  textStyle: TextStyle(fontSize: 14),
-                                  combine: ItemTagsCombine.withTextBefore,
-                                  onPressed: null,
-                                  onLongPressed: null,
-                                  removeButton: ItemTagsRemoveButton(
-                                    onRemoved: () {
-                                      setState(() {
-                                        tags.removeAt(i);
-                                      });
-                                      return true;
-                                    },
+                            ),
+                          ),
+                          onSubmitted: (tag) {
+                            if (tag.split(' ').length == 1) {
+                              setState(() {
+                                tags.add(
+                                  Item(
+                                    title: tag,
                                   ),
                                 );
+                              });
+                            }
+                          },
+                        ),
+                        itemBuilder: (i) {
+                          final Item currentItem = tags[i];
+                          return ItemTags(
+                            index: i,
+                            alignment: MainAxisAlignment.spaceAround,
+                            title: currentItem.title,
+                            customData: currentItem.customData,
+                            textStyle: TextStyle(fontSize: 14),
+                            combine: ItemTagsCombine.onlyText,
+                            onPressed: null,
+                            onLongPressed: null,
+                            removeButton: ItemTagsRemoveButton(
+                              onRemoved: () {
+                                setState(() {
+                                  tags.removeAt(i);
+                                });
+                                return true;
                               },
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  file == null
+                      ? Expanded(
+                          child: Container(),
+                        )
+                      : Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(left: 5.0),
+                            padding: const EdgeInsets.only(
+                              top: 8.0,
+                              bottom: 32,
+                            ),
                             child: Container(
+                              width: double.infinity,
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueAccent)),
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.pin_drop,
-                                  color: Theme.of(context).primaryColor,
-                                  size: 35,
-                                ),
-                                title: Container(
-                                  width: 250,
-                                  child: TextField(
-                                    controller: locationController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Location',
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                trailing: CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromRGBO(244, 248, 245, 1),
-                                  radius: 25,
-                                  child: IconButton(
-                                    onPressed: getUserLocation,
-                                    icon: Icon(
-                                      Icons.my_location,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ),
+                                boxShadow: kElevationToShadow[3],
                               ),
+                              child: file == null
+                                  ? null
+                                  : Image(
+                                      image: FileImage(file),
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(bottom: 10.0),
-                  //   child: Tags(
-                  //     key: _tagKey,
-                  //     itemCount: tags.length,
-                  //     columns: 3,
-                  //     textField: TagsTextField(
-                  //       hintText: 'Enter 1 word tags',
-                  //       textStyle: TextStyle(
-                  //         fontSize: 14,
-                  //       ),
-                  //       onSubmitted: (tag) {
-                  //         if (tag.split(' ').length == 1) {
-                  //           setState(() {
-                  //             tags.add(
-                  //               Item(
-                  //                 title: tag,
-                  //               ),
-                  //             );
-                  //           });
-                  //         }
-                  //       },
-                  //     ),
-                  //     itemBuilder: (i) {
-                  //       final Item currentItem = tags[i];
-                  //       return ItemTags(
-                  //         index: i,
-                  //         title: currentItem.title,
-                  //         customData: currentItem.customData,
-                  //         textStyle: TextStyle(fontSize: 14),
-                  //         combine: ItemTagsCombine.withTextBefore,
-                  //         onPressed: null,
-                  //         onLongPressed: null,
-                  //         removeButton: ItemTagsRemoveButton(
-                  //           onRemoved: () {
-                  //             setState(() {
-                  //               tags.removeAt(i);
-                  //             });
-                  //             return true;
-                  //           },
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  // Card(
-                  //   child: ListTile(
-                  //     leading: Icon(
-                  //       Icons.pin_drop,
-                  //       color: Theme.of(context).primaryColor,
-                  //       size: 35,
-                  //     ),
-                  //     title: Container(
-                  //       // width: 250,
-                  //       child: TextField(
-                  //         controller: locationController,
-                  //         decoration: InputDecoration(
-                  //           hintText: 'Location',
-                  //           border: InputBorder.none,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     trailing: CircleAvatar(
-                  //       backgroundColor: Color.fromRGBO(244, 248, 245, 1),
-                  //       radius: 25,
-                  //       child: IconButton(
-                  //         onPressed: getUserLocation,
-                  //         icon: Icon(
-                  //           Icons.my_location,
-                  //           color: Theme.of(context).primaryColor,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.only(top: 10),
-                  // ),
                 ],
               ),
             ),
@@ -553,8 +306,46 @@ class _UploadState extends State<Upload> {
 
   @override
   Widget build(BuildContext context) {
-    var deviceData = MediaQuery.of(context);
-    print(deviceData);
     return buildUploadForm();
   }
 }
+
+// Expanded(
+//   flex: 2,
+//   child: Padding(
+//     padding: EdgeInsets.only(left: 5.0),
+//     child: Container(
+//       decoration: BoxDecoration(
+//           border: Border.all(color: Colors.blueAccent)),
+//       child: ListTile(
+//         leading: Icon(
+//           Icons.pin_drop,
+//           color: Theme.of(context).primaryColor,
+//           size: 35,
+//         ),
+//         title: Container(
+//           width: 250,
+//           child: TextField(
+//             controller: locationController,
+//             decoration: InputDecoration(
+//               hintText: 'Location',
+//               border: InputBorder.none,
+//             ),
+//           ),
+//         ),
+//         trailing: CircleAvatar(
+//           backgroundColor:
+//               Color.fromRGBO(244, 248, 245, 1),
+//           radius: 25,
+//           child: IconButton(
+//             onPressed: getUserLocation,
+//             icon: Icon(
+//               Icons.my_location,
+//               color: Theme.of(context).primaryColor,
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   ),
+// ),

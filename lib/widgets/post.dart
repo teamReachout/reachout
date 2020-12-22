@@ -9,6 +9,7 @@ import 'package:reachout/models/constants.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/comments.dart';
 import 'package:reachout/screens/profile_page.dart';
+import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:google_fonts/google_fonts.dart';
@@ -174,7 +175,7 @@ class _PostState extends State<Post> {
       future: usersRef.document(ownerId).get(),
       builder: (ctx, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return LoadingIndicator();
         }
         User user = User.fromDocument(snapshot.data);
         bool isPostOwner = currentUserId == ownerId;
@@ -316,22 +317,12 @@ class _PostState extends State<Post> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 8.0, 0, 12),
         child: Container(
-          // width: data.width,
-          // height: data.height * 0.7,
-          decoration: BoxDecoration(boxShadow: kElevationToShadow[3]
-              // [BoxShadow(
-              //   color: Colors.black,
-              // )]
-              ),
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              CachedNetworkImage(
-                  imageUrl: mediaUrl,
-                  // fit: BoxFit.fill,
-                  // width: data.width,
-                  height: data.height * 0.7),
-            ],
+          width: data.width,
+          height: data.height * 0.5,
+          decoration: BoxDecoration(boxShadow: kElevationToShadow[3]),
+          child: CachedNetworkImage(
+            imageUrl: mediaUrl,
+            fit: BoxFit.cover,
           ),
         ),
       ),
@@ -415,21 +406,20 @@ class _PostState extends State<Post> {
           Text(reachoutQ2),
           Flexible(
             child: TextFormField(
-              validator: (value) {
-                if (value == null || value.trim() == '') {
-                  return "";
-                }
-                return null;
-              },
-              onSaved: (value) {
-                reachoutAns2 = value;
-              },
-              maxLines: 5,
-              minLines: 3,
-              autocorrect: true,
-              maxLength: 200,
-              decoration: kInputDecoration
-            ),
+                validator: (value) {
+                  if (value == null || value.trim() == '') {
+                    return "";
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  reachoutAns2 = value;
+                },
+                maxLines: 5,
+                minLines: 3,
+                autocorrect: true,
+                maxLength: 200,
+                decoration: kInputDecoration),
           ),
           Text(reachoutQ3),
           Flexible(
@@ -467,7 +457,7 @@ class _PostState extends State<Post> {
           actions: [
             SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height *0.6,
+                height: MediaQuery.of(context).size.height * 0.6,
                 width: MediaQuery.of(context).size.width * 0.6,
                 child: Column(
                   children: [
@@ -606,9 +596,13 @@ class _PostState extends State<Post> {
               ),
               GestureDetector(
                 onTap: () => handleReachout(context),
-                child: Icon(
-                  MdiIcons.contactsOutline, // Reachout button
-                  size: 28,
+                child: Text(
+                  'REACHOUT',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    letterSpacing: 3,
+                  ),
                 ),
               ),
             ],

@@ -14,6 +14,7 @@ import 'package:reachout/screens/edit_profile.dart';
 import 'package:reachout/widgets/education_row.dart';
 import 'package:reachout/widgets/experience_row.dart';
 import 'package:reachout/widgets/interests.dart';
+import 'package:reachout/widgets/loading_indicator.dart';
 
 class ProfilePage extends StatefulWidget {
   final String profileId;
@@ -761,7 +762,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: appBar(),
       body: isLoading == true
-          ? Center(child: CircularProgressIndicator())
+          ? LoadingIndicator()
           : RefreshIndicator(
               child: Stack(
                 children: <Widget>[
