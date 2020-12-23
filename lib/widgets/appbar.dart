@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/screens/chat_list.dart';
 import 'package:reachout/widgets/search.dart';
 
@@ -9,7 +10,6 @@ class Appbar extends StatefulWidget {
 
 class _AppbarState extends State<Appbar> {
   chatList() {
-    print('cvlkjhjkjhjk');
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => ChatList(),
@@ -21,6 +21,7 @@ class _AppbarState extends State<Appbar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
+      toolbarOpacity: 1.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: const Radius.circular(7),
@@ -46,13 +47,12 @@ class _AppbarState extends State<Appbar> {
         ),
       ),
       primary: true,
-      title: Text(
-        'ReachOut',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: const Color.fromRGBO(244, 248, 245, 1),
-        ),
-      ),
+      title: Text('Reachout'.toUpperCase(),
+          style: GoogleFonts.roboto(
+            fontSize: 20,
+              fontWeight: FontWeight.w300,
+              color: const Color.fromRGBO(244, 248, 245, 1),
+              letterSpacing: 1.2)),
     );
   }
 }

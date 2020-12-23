@@ -86,7 +86,7 @@ class _EditProfileState extends State<EditProfile> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 6.0),
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, MediaQuery.of(context).viewInsets.bottom), 
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:

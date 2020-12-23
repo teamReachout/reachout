@@ -319,7 +319,7 @@ class _PostState extends State<Post> {
         child: Container(
           width: data.width,
           height: data.height * 0.5,
-          decoration: BoxDecoration(boxShadow: kElevationToShadow[3]),
+          // decoration: BoxDecoration(boxShadow: kElevationToShadow[3]),
           child: CachedNetworkImage(
             imageUrl: mediaUrl,
             fit: BoxFit.cover,
@@ -749,6 +749,8 @@ class _PostState extends State<Post> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
       child: Card(
+        elevation: 0.5,
+        color: Colors.white,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

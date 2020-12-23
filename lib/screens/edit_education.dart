@@ -121,7 +121,7 @@ class _EditEducationState extends State<EditEducation> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 6.0),
+            padding:EdgeInsets.fromLTRB(0.0, 0.0, 10.0, MediaQuery.of(context).viewInsets.bottom),
             child: Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(

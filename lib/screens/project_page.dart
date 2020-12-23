@@ -15,6 +15,74 @@ import 'package:reachout/widgets/interests.dart';
 import 'package:reachout/widgets/user_card.dart';
 import 'package:flutter/services.dart';
 
+// class Scroller extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return SingleChildScrollView(
+//                               scrollDirection: Axis.horizontal,
+//                               physics: BouncingScrollPhysics(),
+//                               child: Row(
+//                                 children: [
+//                                   Card(
+//                                     // color: Colors.grey[200],
+//                                     child: Column(
+//                                       children: [
+//                                         _buildTimelineHeader(
+//                                           'Founders',
+//                                           MdiIcons.briefcaseOutline,
+//                                         ),
+//                                         Padding(
+//                                           padding:
+//                                               const EdgeInsets.only(top: 8.0),
+//                                           child: Stack(
+//                                             children: <Widget>[
+//                                               buildFounders(),
+//                                             ],
+//                                           ),
+//                                         ),
+//                                       ],
+//                                     ),
+//                                   ),
+//                                   Card(
+//                                     color: Colors.grey[200],
+//                                     child: Column(
+//                                       children: [
+//                                         _buildTimelineHeader(
+//                                           'Collaborators',
+//                                           MdiIcons.schoolOutline,
+//                                         ),
+//                                         Padding(
+//                                           padding:
+//                                               const EdgeInsets.only(top: 20.0),
+//                                           child: Stack(
+//                                             children: <Widget>[
+//                                               buildCollaborator(),
+//                                             ],
+//                                           ),
+//                                         ),
+//                                       ],
+//                                     ),
+//                                   ),
+//                                   Padding(
+//                                     padding: EdgeInsets.only(bottom: 8.0),
+//                                     child: Card(
+//                                       color: Colors.grey[200],
+//                                       child: Column(
+//                                         children: [
+//                                           _buildTopHeader(
+//                                               'Contact', Icons.phone),
+//                                           buildContactInfo(),
+//                                         ],
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                             );
+
+//   }
+// }
+
 class ProjectPage extends StatefulWidget {
   final String projectId;
   final String profileId;
@@ -47,7 +115,7 @@ class _ProjectPageState extends State<ProjectPage> {
         Text(
           numb.toString(),
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white70,
             fontWeight: FontWeight.bold,
             fontSize: 25,
           ),
@@ -55,7 +123,7 @@ class _ProjectPageState extends State<ProjectPage> {
         Text(
           text,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white70,
           ),
         )
       ],
@@ -152,10 +220,11 @@ class _ProjectPageState extends State<ProjectPage> {
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
                   onPressed: text == 'Area of Work'
-                      ? editAreaOfWork //() {
-                      //modalSheetFunction(
-                      //EditProjectWork(projectId: currentUser.id));
-                      //}
+                      ? //editAreaOfWork
+                       () {
+                      modalSheetFunction(
+                      EditProjectWork(profileId: currentUser.id, projectId: widget.projectId,));
+                      }
                       : () {
                           modalSheetFunction(
                               EditProject(projectId: currentUser.id));
@@ -251,7 +320,7 @@ class _ProjectPageState extends State<ProjectPage> {
         }
         Project project = Project.fromDocument(snapshot.data);
         return Padding(
-          padding: const EdgeInsets.only(top: 12.0),
+          padding: const EdgeInsets.fromLTRB(0, 6, 0, 12),
           child: Column(
             children: <Widget>[
               contactInfo('Email', project.contact),
@@ -282,7 +351,7 @@ class _ProjectPageState extends State<ProjectPage> {
                 style: TextStyle(fontSize: 18.0),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 6.0),
+                padding: EdgeInsets.only(top: 3.0),
                 child: Text(
                   email,
                   style: TextStyle(
@@ -468,7 +537,7 @@ class _ProjectPageState extends State<ProjectPage> {
           'Followers',
         ),
         Container(
-          color: Colors.black,
+          color: Colors.white12,
           width: 0.2,
           height: 22,
         ),
@@ -477,7 +546,7 @@ class _ProjectPageState extends State<ProjectPage> {
           'Following',
         ),
         Container(
-          color: Colors.black,
+          color: Colors.white12,
           width: 0.2,
           height: 22,
         ),
@@ -505,13 +574,13 @@ class _ProjectPageState extends State<ProjectPage> {
           ),
           color: Colors.transparent,
           border: Border.all(
-            color: Colors.black,
+            color: Colors.white70,
           ),
         ),
         child: Text(
           text.toUpperCase(),
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white70,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -923,105 +992,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                 ),
                               ),
                             ),
-
-                            // buildDivider(),
-                            // Card(
-                            //   // color: Colors.grey[200],
-                            //   child: Column(
-                            //     children: [
-                            //       _buildTimelineHeader(
-                            //         'Founders',
-                            //         MdiIcons.briefcaseOutline,
-                            //       ),
-                            //       Padding(
-                            //         padding: const EdgeInsets.only(top: 8.0),
-                            //         child: Stack(
-                            //           children: <Widget>[
-                            //             buildFounders(),
-                            //           ],
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            Card(
-                              // color: Colors.grey[200],
-                              child: Column(
-                                children: [
-                                  _buildTimelineHeader(
-                                    'Founders',
-                                    MdiIcons.briefcaseOutline,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        buildFounders(),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top: 8.0),
-                            //   child: Stack(
-                            //     children: <Widget>[
-                            //       buildFounders(),
-                            //     ],
-                            //   ),
-                            // ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(
-                            //     top: 8.0,
-                            //     bottom: 8.0,
-                            //   ),
-                            //   child: Divider(
-                            //     thickness: 2,
-                            //   ),
-                            // ),
-
-                            Card(
-                              color: Colors.grey[200],
-                              child: Column(
-                                children: [
-                                  _buildTimelineHeader(
-                                    'Collaborators',
-                                    MdiIcons.schoolOutline,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20.0),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        buildCollaborator(),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top: 20.0),
-                            //   child: Stack(
-                            //     children: <Widget>[
-                            //       buildCollaborator(),
-                            //     ],
-                            //   ),
-                            // ),
-                            // buildDivider(),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 8.0),
-                              child: Card(
-                                color: Colors.grey[200],
-                                child: Column(
-                                  children: [
-                                    _buildTopHeader('Contact', Icons.phone),
-                                    buildContactInfo(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            // buildContactInfo(),
                           ],
                         ),
                       );
@@ -1039,7 +1009,7 @@ class _ProjectPageState extends State<ProjectPage> {
                       padding: EdgeInsets.only(top: 0),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Color(0xFFa7c5eb),
+                            color: Color(0xFF393e46),
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.zero,
                                 topRight: Radius.zero,
@@ -1085,6 +1055,112 @@ class _ProjectPageState extends State<ProjectPage> {
                       ),
                     ),
                   ),
+                  Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              modalSheetFunction(
+                                  // SingleChildScrollView(
+                                  // scrollDirection: Axis.horizontal,
+                                  Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 18, 0, 10),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('TEAM INFORMATION',
+                                          style: GoogleFonts.roboto(
+                                              fontSize: 20,
+                                              letterSpacing: 0.8,
+                                              fontWeight: FontWeight.w300,
+                                              )),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              width: 1.5, color: Colors.black26)),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          _buildTimelineHeader(
+                                            'Founders',
+                                            MdiIcons.briefcaseOutline,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8.0),
+                                            child: Stack(
+                                              children: <Widget>[
+                                                buildFounders(),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              width: 1, color: Colors.black26)),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          _buildTimelineHeader(
+                                            'Collaborators',
+                                            MdiIcons.schoolOutline,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 20.0),
+                                            child: Stack(
+                                              children: <Widget>[
+                                                buildCollaborator(),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                              width: 1, color: Colors.black26)),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          _buildTopHeader('Contact', Icons.phone),
+                                          buildContactInfo(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ));
+                            },
+                            child: Icon(Icons.group,
+                            size: 30),
+                          ),
+                        ),
+                      )),
                 ],
               ),
               onRefresh: refresh,
