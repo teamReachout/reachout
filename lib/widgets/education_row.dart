@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reachout/models/education.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EducationRow extends StatefulWidget {
   final Education education;
@@ -36,7 +37,7 @@ class EducationRowState extends State<EducationRow> {
                 // ),
                 child: CircleAvatar(
                   radius: 5,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.black,
                 ),
               ),
               Expanded(
@@ -45,16 +46,16 @@ class EducationRowState extends State<EducationRow> {
                   children: <Widget>[
                     Text(
                       widget.education.title,
-                      style: TextStyle(fontSize: 18.0),
+                      style: GoogleFonts.roboto(fontSize: 17.0, color: Colors.black, letterSpacing: 0.7),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 6.0),
                       child: Text(
                         widget.education.institute,
                         style: TextStyle(
-                            fontSize: 14.0,
+                            fontSize: 16.0,
                             color: Colors.grey,
-                            fontWeight: FontWeight.w400),
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                     // Padding(
@@ -72,16 +73,19 @@ class EducationRowState extends State<EducationRow> {
                 padding: const EdgeInsets.only(right: 16.0, left: 15.0),
                 child: Text(
                   widget.education.date,
-                  style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                  style:  GoogleFonts.quicksand(
+                            fontSize: 14.0,
+                            textBaseline: TextBaseline.alphabetic),
                 ),
               )
             ],
           ),
         ),
         Divider(
-          thickness: 2,
+          thickness: 0.5,
           indent: 45,
           endIndent: 45,
+          color: Colors.black87,
         ),
       ],
     );

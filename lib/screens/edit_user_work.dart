@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/users.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditUserWork extends StatefulWidget {
   final String profileId;
@@ -71,6 +72,20 @@ class _EditUserWorkState extends State<EditUserWork> {
       columns: 3,
       textField: TagsTextField(
         hintText: 'Enter 1 word tags',
+        inputDecoration: InputDecoration(
+            focusColor: Colors.red,
+            //hintText: text,
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(0))),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.black, width: 2.0),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)))),
         textStyle: TextStyle(
           fontSize: 14,
         ),
@@ -111,62 +126,74 @@ class _EditUserWorkState extends State<EditUserWork> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: isLoading
-          ? CircularProgressIndicator()
-          : ListView(
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 16,
-                          bottom: 8,
-                        ),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(currentUser.photoUrl),
-                        ),
+    return isLoading
+        ? CircularProgressIndicator()
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //     top: 16,
+              //     bottom: 8,
+              //   ),
+              //   child: CircleAvatar(
+              //     radius: 50,
+              //     backgroundImage: NetworkImage(currentUser.photoUrl),
+              //   ),
+              // ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    buildTags(),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      0.0, 0.0, 10.0, MediaQuery.of(context).viewInsets.bottom),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      elevation: MaterialStateProperty.all(0.0),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0))),
+                      side: MaterialStateProperty.all(
+                          BorderSide(color: Colors.black)),
+                      padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                      // minimumSize: MaterialStateProperty.all(Size(48.0, 32.0)),
+                    ),
+                    onPressed: updateProfileData,
+                    child: Text(
+                      'SAVE',
+                      style: GoogleFonts.roboto(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.4,
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          children: <Widget>[
-                            buildTags(),
-                          ],
-                        ),
-                      ),
-                      RaisedButton(
-                        onPressed: updateProfileData,
-                        child: Text(
-                          'Update',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          onPressed: cancelUpdate,
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ],
-            ),
-    );
+              )
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: RaisedButton(
+              //     onPressed: cancelUpdate,
+              //     child: Text(
+              //       'Cancel',
+              //       style: TextStyle(
+              //         color: Colors.blue,
+              //         fontSize: 20,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          );
   }
 }

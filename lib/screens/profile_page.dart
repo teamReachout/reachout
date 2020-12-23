@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/main.dart';
 import 'package:reachout/models/education.dart';
 import 'package:reachout/models/experience.dart';
 import 'package:reachout/models/users.dart';
@@ -15,6 +16,10 @@ import 'package:reachout/widgets/education_row.dart';
 import 'package:reachout/widgets/experience_row.dart';
 import 'package:reachout/widgets/interests.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:reachout/screens/edit_user_work.dart';
+
+const Color headerColour = Colors.grey;
 
 class ProfilePage extends StatefulWidget {
   final String profileId;
@@ -33,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3fZ_ebLrIR7-37WMGcyj_RO-0TTcZGtUKtg&usqp=CAU';
   bool isLoading;
   bool isCurrentUser;
-  List<String> lists = ['Create New Project', 'Sign Out'];
+  List<String> lists = ['New Project', 'Sign Out'];
 
   createColumn(int numb, String text) {
     return Column(
@@ -42,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           numb.toString(),
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white70,
             fontWeight: FontWeight.bold,
             fontSize: 25,
           ),
@@ -50,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           text,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white70,
           ),
         )
       ],
@@ -148,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
                   onPressed: text == 'Area of Work'
-                      ? editAreaOfWork
+                      ? () {modalSheetFunction(EditUserWork(profileId: currentUser.id)); }
                       : () {
                           modalSheetFunction(
                               EditProfile(profileId: currentUser.id));
@@ -196,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ) //editTimeline(text),
                   )
-              : Icon(icon, color: Colors.black),
+              : Icon(icon, color: Colors.white),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
           ),
@@ -207,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   buildContactInfo() {
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 12),
       child: Column(
         children: <Widget>[
           contactInfo('Email', profile.email),
@@ -255,33 +260,33 @@ class _ProfilePageState extends State<ProfilePage> {
 
   buildAboutUser() {
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0),
+      padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 10),
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
               ),
               Expanded(
                 child: Text(
                   profile.bio,
-                  style: TextStyle(fontSize: 18.0),
+                  style: GoogleFonts.quicksand(
+                    fontSize: 16.0,
+                  ),
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              bottom: 8.0,
-            ),
-            child: Divider(
-              thickness: 2,
-            ),
-          ),
-          _buildTopHeader('Area of Work', Icons.desktop_windows),
-          buildAreaOfWork(),
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     top: 8.0,
+          //     bottom: 8.0,
+          //   ),
+          //   child: Divider(
+          //     thickness: 2,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -307,7 +312,7 @@ class _ProfilePageState extends State<ProfilePage> {
       top: 0.0,
       bottom: 0.0,
       left: 35.0,
-      child: Container(width: 1.0, color: Colors.black),
+      child: Container(width: 1.0, color: Colors.grey),
     );
   }
 
@@ -358,7 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
               Padding(
@@ -368,7 +373,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: <Widget>[
                     Icon(
                       Icons.location_on,
-                      color: Colors.black,
+                      color: Colors.white,
                       size: 17,
                     ),
                     Padding(
@@ -376,12 +381,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Text(
                         'Aleppo-SY',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           wordSpacing: 2,
                           letterSpacing: 4,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               )
@@ -401,7 +406,7 @@ class _ProfilePageState extends State<ProfilePage> {
           'Followers',
         ),
         Container(
-          color: Colors.black,
+          color: Colors.white70,
           width: 0.2,
           height: 22,
         ),
@@ -410,7 +415,7 @@ class _ProfilePageState extends State<ProfilePage> {
           'Following',
         ),
         Container(
-          color: Colors.black,
+          color: Colors.white70,
           width: 0.2,
           height: 22,
         ),
@@ -697,6 +702,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   AppBar appBar() {
     return AppBar(
+      centerTitle: true,
+      title: Text('profile'.toUpperCase(),
+          style: GoogleFonts.roboto(
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
+              color: const Color.fromRGBO(244, 248, 245, 1),
+              letterSpacing: 1.2)),
       actions: widget.profileId != currentUser.id
           ? null
           : <Widget>[
@@ -760,95 +772,154 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      backgroundColor: Colors.grey[100],
+      // appBar: appBar(),
       body: isLoading == true
           ? LoadingIndicator()
           : RefreshIndicator(
               child: Stack(
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      buildProfileHeader(),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 38,
-                          left: 38,
-                          top: 15,
-                          bottom: 12,
-                        ),
-                        child: buildProfileData(),
-                      ),
-                      Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.only(
-                            top: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xffefefef),
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(34),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   DraggableScrollableSheet(
                     builder: (ctx, controller) {
                       return Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffefefef),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   color: Color(0xffefefef),
+                        // ),
                         child: ListView(
                           controller: controller,
                           children: <Widget>[
-                            _buildTopHeader('About', Icons.person_outline),
-                            buildAboutUser(),
-                            buildDivider(),
-                            _buildTimelineHeader(
-                                'Experience', MdiIcons.briefcaseOutline),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  _buildTimeline(),
-                                  buildExperience(),
+                            Card(
+                              color: headerColour,
+                              elevation: 0,
+                              margin: EdgeInsets.fromLTRB(1, 0, 1, 0),
+                              child: _buildTopHeader(
+                                  'About', Icons.person_outline),
+                            ),
+                            Card(
+                              margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                              color: Colors.grey[200],
+                              elevation: 0.0,
+                              child: Column(
+                                children: [buildAboutUser()],
+                              ),
+                            ),
+                            Card(
+                              color: headerColour,
+                              elevation: 0,
+                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                              child: _buildTopHeader(
+                                  'Area of Work', Icons.desktop_windows),
+                            ),
+                            Card(
+                              margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                              color: Colors.grey[200],
+                              elevation: 0.0,
+                              child: Column(
+                                children: [
+                                  buildAreaOfWork(),
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 8.0,
-                                bottom: 8.0,
-                              ),
-                              child: Divider(
-                                thickness: 2,
-                              ),
+
+                            Card(
+                              color: headerColour,
+                              elevation: 0,
+                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                              child: _buildTimelineHeader(
+                                  'Experience', MdiIcons.briefcaseOutline),
                             ),
-                            _buildTimelineHeader(
-                                'Education', MdiIcons.schoolOutline),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  _buildTimeline(),
-                                  buildEducation(),
+
+                            Column(
+                              children: [
+                                Card(
+                                  margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                                  color: Colors.grey[200],
+                                  elevation: 0.0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        _buildTimeline(),
+                                        buildExperience(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(
+                            //     top: 8.0,
+                            //     bottom: 8.0,
+                            //   ),
+                            //   child: Divider(
+                            //     thickness: 2,
+                            //   ),
+                            // ),
+
+                            Card(
+                              color: headerColour,
+                              elevation: 0,
+                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                              child: _buildTimelineHeader(
+                                  'Education', MdiIcons.schoolOutline),
+                            ),
+                            Card(
+                              color: Colors.grey[200],
+                              margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                              elevation: 0.5,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        _buildTimeline(),
+                                        buildEducation(),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            buildDivider(),
-                            _buildTopHeader('Projects', Icons.group_work),
-                            buildProjects(),
-                            buildDivider(),
-                            _buildTopHeader('Contact', Icons.phone),
-                            buildContactInfo(),
-                            SizedBox(
-                              height: 25,
-                              width: double.infinity,
+
+                            Card(
+                              color: headerColour,
+                              elevation: 0,
+                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                              child:
+                                  _buildTopHeader('Projects', Icons.group_work),
                             ),
+                            Card(
+                              color: Colors.grey[200],
+                              margin: EdgeInsets.fromLTRB(1, 0, 1, 2),
+                              elevation: 0.5,
+                              child: Column(
+                                children: [buildProjects()],
+                              ),
+                            ),
+
+                            // buildDivider(),
+                            Card(
+                                color: headerColour,
+                                elevation: 0,
+                                margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                                child: _buildTopHeader('Contact', Icons.phone)),
+                            Card(
+                              color: Colors.grey[200],
+                              margin: EdgeInsets.fromLTRB(1, 0, 1, 0),
+                              elevation: 0.5,
+                              child: Column(
+                                children: [
+                                  buildContactInfo(),
+                                ],
+                              ),
+                            ),
+
+                            // SizedBox(
+                            //   height: 25,
+                            //   width: double.infinity,
+                            // ),
                           ],
                         ),
                       );
@@ -858,6 +929,69 @@ class _ProfilePageState extends State<ProfilePage> {
                     expand: true,
                     maxChildSize: 1,
                   ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.only(top: 30),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF393e46),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.zero,
+                            topRight: Radius.zero,
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        //  border: Border.all(color: Color(0xFF880E4F), width: 2),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          buildProfileHeader(),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              right: 38,
+                              left: 38,
+                              top: 15,
+                              bottom: 18,
+                            ),
+                            child: buildProfileData(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  widget.profileId != currentUser.id
+                      ? null
+                      : Positioned(
+                          right: 3,
+                          top: 20,
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: PopupMenuButton(
+                                color: Colors.grey[200],
+                                itemBuilder: (BuildContext context) {
+                                  return lists.map((choice) {
+                                    return PopupMenuItem(
+                                      value: choice,
+                                      child: Text(choice),
+                                    );
+                                  }).toList();
+                                },
+                                onSelected: choiceAction,
+                                // captureInheritedThemes: color,
+                                icon: Icon(
+                                  Icons.menu,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                 ],
               ),
               onRefresh: refresh,

@@ -66,20 +66,23 @@ class _UserFeedState extends State<UserFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white10,
       appBar: PreferredSize(
         child: Appbar(),
-        preferredSize: const Size.fromHeight(44),
+        preferredSize: const Size.fromHeight(55),
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate([
-              showTimeline(),
-            ]),
-          )
-        ],
-      ),
+      body: SingleChildScrollView(
+        child: showTimeline(),
+      )
+      // body: CustomScrollView(
+      //   slivers: <Widget>[
+      //     SliverList(
+      //       delegate: SliverChildListDelegate([
+      //         showTimeline(),
+      //       ]),
+      //     )
+      //   ],
+      // ),
     );
   }
 

@@ -13,11 +13,10 @@ class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 6),
+      padding: const EdgeInsets.fromLTRB(6, 4, 6, 6),
       child: Container(
         padding: EdgeInsets.all(4.0),
         decoration: BoxDecoration(
-          color: Color(0xFFf1f1f1),
           border: Border.all(width: 2.0, color: Colors.black12),
           borderRadius: BorderRadius.circular(10.0),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reachout/models/experience.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ExperienceRow extends StatefulWidget {
   final Experience experience;
@@ -28,7 +29,7 @@ class ExperienceRowState extends State<ExperienceRow> {
                     horizontal: 32.0 - widget.verticalBarSize / 2),
                 child: CircleAvatar(
                   radius: 5,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.black,
                 ),
               ),
               Expanded(
@@ -36,25 +37,25 @@ class ExperienceRowState extends State<ExperienceRow> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.experience.jobTitle,
-                      style: TextStyle(fontSize: 18.0),
+                      widget.experience.jobTitle.toUpperCase(),
+                      style: GoogleFonts.roboto(fontSize: 17.0, color: Colors.black, letterSpacing: 0.7),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 6.0),
                       child: Text(
                         widget.experience.company,
                         style: TextStyle(
-                            fontSize: 14.0,
+                            fontSize: 16.0,
                             color: Colors.grey,
-                            fontWeight: FontWeight.w400),
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 6.0),
                       child: Text(
                         widget.experience.description,
-                        style: TextStyle(
-                            fontSize: 12.0,
+                        style: GoogleFonts.quicksand(
+                            fontSize: 14.0,
                             textBaseline: TextBaseline.alphabetic),
                       ),
                     )
@@ -72,9 +73,10 @@ class ExperienceRowState extends State<ExperienceRow> {
           ),
         ),
         Divider(
-          thickness: 2,
+          thickness: 0.5,
           indent: 45,
           endIndent: 45,
+          color: Colors.black87,
         ),
       ],
     );
