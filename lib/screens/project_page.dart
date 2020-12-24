@@ -221,13 +221,20 @@ class _ProjectPageState extends State<ProjectPage> {
                   icon: Icon(Icons.edit, color: Colors.black),
                   onPressed: text == 'Area of Work'
                       ? //editAreaOfWork
-                       () {
-                      modalSheetFunction(
-                      EditProjectWork(profileId: currentUser.id, projectId: widget.projectId,));
-                      }
+                      () {
+                          modalSheetFunction(
+                            EditProjectWork(
+                              profileId: currentUser.id,
+                              projectId: widget.projectId,
+                            ),
+                          );
+                        }
                       : () {
                           modalSheetFunction(
-                              EditProject(projectId: currentUser.id));
+                            EditProject(
+                              projectId: widget.projectId,
+                            ),
+                          );
                         } //editAreaOfWork : editSection,
                   )
               : Icon(icon, color: Colors.black),
@@ -498,8 +505,9 @@ class _ProjectPageState extends State<ProjectPage> {
           Padding(
             padding: const EdgeInsets.only(left: 28.0, top: 7),
             child: CircleAvatar(
-              radius: 48, //changed from 64
-              backgroundImage: NetworkImage(proj.photoUrl),
+              radius: 48,
+              backgroundImage:
+                  proj.photoUrl == null ? null : NetworkImage(proj.photoUrl),
             ),
           ),
           Padding(
@@ -507,19 +515,15 @@ class _ProjectPageState extends State<ProjectPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(proj.name.toUpperCase(),
-                    style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 36,
-                        color: Colors.white,
-                        letterSpacing: 0.5)
-                    // style: TextStyle(
-                    //   fontWeight: FontWeight.bold,
-                    //   fontSize: 48,
-                    //   color: Colors.white,
-                    //   letterSpacing: 0.5
-                    // ),
-                    ),
+                Text(
+                  proj.name.toUpperCase(),
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 36,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
               ],
             ),
           ),
@@ -1009,14 +1013,14 @@ class _ProjectPageState extends State<ProjectPage> {
                       padding: EdgeInsets.only(top: 0),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Color(0xFF393e46),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.zero,
-                                topRight: Radius.zero,
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(
-                                    20)) //(Radius.zero, Radius.zero, Radius.circular(10), Radius.circular(10)),
-                            ),
+                          color: Color(0xFF393e46),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.zero,
+                            topRight: Radius.zero,
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1032,43 +1036,23 @@ class _ProjectPageState extends State<ProjectPage> {
                               ),
                               child: buildProfileData(),
                             ),
-                            // SizedBox(
-                            //   width: double.infinity,
-                            //   height: 100,
-                            // )
-                            // Expanded(
-                            //   child: Container(
-                            //     width: double.infinity,
-                            //     margin: EdgeInsets.only(
-                            //       top: 15,
-                            //     ),
-                            //     decoration: BoxDecoration(
-                            //       color: Color(0xffefefef),
-                            //       borderRadius: BorderRadius.vertical(
-                            //         top: Radius.circular(34),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
                     ),
                   ),
                   Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: FloatingActionButton(
-                            onPressed: () {
-                              modalSheetFunction(
-                                  // SingleChildScrollView(
-                                  // scrollDirection: Axis.horizontal,
-                                  Column(
+                    bottom: 10,
+                    right: 10,
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            modalSheetFunction(
+                              Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Padding(
@@ -1077,19 +1061,21 @@ class _ProjectPageState extends State<ProjectPage> {
                                       alignment: Alignment.center,
                                       child: Text('TEAM INFORMATION',
                                           style: GoogleFonts.roboto(
-                                              fontSize: 20,
-                                              letterSpacing: 0.8,
-                                              fontWeight: FontWeight.w300,
-                                              )),
+                                            fontSize: 20,
+                                            letterSpacing: 0.8,
+                                            fontWeight: FontWeight.w300,
+                                          )),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(
-                                              width: 1.5, color: Colors.black26)),
+                                              width: 1.5,
+                                              color: Colors.black26)),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -1114,7 +1100,8 @@ class _ProjectPageState extends State<ProjectPage> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(
                                               width: 1, color: Colors.black26)),
                                       child: Column(
@@ -1125,8 +1112,8 @@ class _ProjectPageState extends State<ProjectPage> {
                                             MdiIcons.schoolOutline,
                                           ),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 20.0),
+                                            padding: const EdgeInsets.only(
+                                                top: 20.0),
                                             child: Stack(
                                               children: <Widget>[
                                                 buildCollaborator(),
@@ -1141,26 +1128,29 @@ class _ProjectPageState extends State<ProjectPage> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(
                                               width: 1, color: Colors.black26)),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          _buildTopHeader('Contact', Icons.phone),
+                                          _buildTopHeader(
+                                              'Contact', Icons.phone),
                                           buildContactInfo(),
                                         ],
                                       ),
                                     ),
                                   ),
                                 ],
-                              ));
-                            },
-                            child: Icon(Icons.group,
-                            size: 30),
-                          ),
+                              ),
+                            );
+                          },
+                          child: Icon(Icons.group, size: 30),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               onRefresh: refresh,

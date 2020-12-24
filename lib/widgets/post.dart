@@ -105,6 +105,22 @@ class _PostState extends State<Post> {
     this.likeCount,
   });
 
+  final customInputDecoration = InputDecoration(
+    contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+    border:
+        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black, width: 2.0),
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    ),
+  );
+
   deletePost() async {
     postsRef
         .document(ownerId)
@@ -189,7 +205,10 @@ class _PostState extends State<Post> {
               title: GestureDetector(
                 onTap: () => Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
+                    builder: (context) => ProfilePage(
+                      profileId: ownerId,
+                      onSignedOut: null,
+                    ),
                   ),
                 ),
                 child: Text(
@@ -400,26 +419,27 @@ class _PostState extends State<Post> {
               minLines: 3,
               autocorrect: true,
               maxLength: 200,
-              decoration: kInputDecoration,
+              decoration: customInputDecoration,
             ),
           ),
           Text(reachoutQ2),
           Flexible(
             child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.trim() == '') {
-                    return "";
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  reachoutAns2 = value;
-                },
-                maxLines: 5,
-                minLines: 3,
-                autocorrect: true,
-                maxLength: 200,
-                decoration: kInputDecoration),
+              validator: (value) {
+                if (value == null || value.trim() == '') {
+                  return "";
+                }
+                return null;
+              },
+              onSaved: (value) {
+                reachoutAns2 = value;
+              },
+              maxLines: 5,
+              minLines: 3,
+              autocorrect: true,
+              maxLength: 200,
+              decoration: customInputDecoration,
+            ),
           ),
           Text(reachoutQ3),
           Flexible(
@@ -437,7 +457,8 @@ class _PostState extends State<Post> {
               minLines: 3,
               autocorrect: true,
               maxLength: 200,
-              decoration: kInputDecoration,
+              decoration:
+                  customInputDecoration, //created at the starting of the file
             ),
           ),
         ],
@@ -454,54 +475,52 @@ class _PostState extends State<Post> {
             'ReachOut Form',
             textAlign: TextAlign.center,
           ),
-          actions: [
-            SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.6,
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Column(
-                  children: [
-                    Flexible(
-                      flex: 4,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.6,
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: reachoutForm(),
-                      ),
+          content: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.6,
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: Column(
+                children: [
+                  Flexible(
+                    flex: 4,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: reachoutForm(),
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FlatButton(
-                            onPressed: reachout,
-                            child: Text(
-                              'SEND',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FlatButton(
+                          onPressed: reachout,
+                          child: Text(
+                            'SEND',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
                           ),
-                          FlatButton(
-                            onPressed: leaveReachout,
-                            child: Text(
-                              'CANCEL',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                        ),
+                        FlatButton(
+                          onPressed: leaveReachout,
+                          child: Text(
+                            'CANCEL',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

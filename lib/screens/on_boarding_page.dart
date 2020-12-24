@@ -33,7 +33,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   Widget _buildImage(String assetName) {
     return Align(
-      child: Image.asset('assets/$assetName.jpg', width: 350.0),
+      child: Image.asset('images/$assetName.png', width: 350.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -53,61 +53,53 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       key: introKey,
       pages: [
         PageViewModel(
-          title: "Fractional shares",
-          body:
-              "Instead of having to buy an entire share, invest any amount you want.",
-          image: _buildImage('img1'),
+          title: "YOUR PLACE TO LEARN",
+          body: "Learn from the other entrepreneurs' skills and experiences",
+          image: _buildImage('community'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Learn as you go",
-          body:
-              "Download the Stockpile app and master the market with our mini-lesson.",
-          image: _buildImage('img2'),
+          title: "SHOW YOUR WORK",
+          body: "Share your experiences and business with others",
+          image: _buildImage('showYourWork'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Kids and teens",
+          title: "REACHOUT",
           body:
-              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
-          image: _buildImage('img3'),
+              "Reachout to other entrepreneurs, freelancers and investors to collaborate and grow",
+          image: _buildImage('collaborations'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Another title page",
-          body: "Another beautiful body text for this example onboarding",
-          image: _buildImage('img2'),
+          title: "DOUBTS AND RESOURCES",
+          body:
+              "Clear doubts and find resources in our doubt forum",
+          image: _buildImage('doubt'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "EXPLORE",
+          body:
+              "Explore opportunities like competitions, business conclaves and trade shows",
+          image: _buildImage('opportunities'),
           footer: RaisedButton(
             onPressed: () {
               introKey.currentState?.animateScroll(0);
             },
             child: const Text(
-              'FooButton',
+              'Go Back',
               style: TextStyle(color: Colors.white),
             ),
-            color: Colors.lightBlue,
+            color: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
           ),
           decoration: pageDecoration,
         ),
-        PageViewModel(
-          title: "Title of last page",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Click on ", style: bodyStyle),
-              Icon(Icons.edit),
-              Text(" to edit a post", style: bodyStyle),
-            ],
-          ),
-          image: _buildImage('img1'),
-          decoration: pageDecoration,
-        ),
       ],
       onDone: () => _onIntroEnd(context),
-      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
@@ -117,6 +109,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),
+        activeColor: Color(0xFF880E4F),
         activeSize: Size(22.0, 10.0),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),

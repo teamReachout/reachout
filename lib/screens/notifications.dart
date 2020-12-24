@@ -8,8 +8,6 @@ import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:reachout/widgets/notification_item.dart';
 import 'package:reachout/widgets/search.dart';
 
-
-
 class Notifications extends StatefulWidget {
   @override
   _NotificationsState createState() => _NotificationsState();
@@ -23,8 +21,6 @@ class _NotificationsState extends State<Notifications> {
     super.initState();
     getNotifications = getActivityFeed();
   }
-
-
 
   getActivityFeed() async {
     QuerySnapshot snapshot = await activityFeedRef
@@ -67,48 +63,46 @@ class _NotificationsState extends State<Notifications> {
           ),
           actions: <Widget>[
             FlatButton(
-                onPressed: goToRequests,
-                child: Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.all(0),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Icon(
-                              CupertinoIcons.person,
-                              color: const Color.fromRGBO(244, 248, 245, 1),
-                            ),
-                          ),
+              onPressed: goToRequests,
+              child: Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(0),
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Icon(
+                          CupertinoIcons.person,
+                          color: const Color.fromRGBO(244, 248, 245, 1),
                         ),
-                        Container(
-                            margin: EdgeInsets.all(0),
-                            child: StreamBuilder<QuerySnapshot>(
-
-                                stream: requestsRef
-                                    .document(currentUser.id)
-                                    .collection('userRequests').
-                                    snapshots(),
-                                builder: (context, snapshot) {
-                                  if(!snapshot.hasData)
-                                  {
-                                    return LoadingIndicator();
-                                  }
-                                 numberRequests = snapshot.data.documents.length;
-                                 return Text(
-                                '(${numberRequests.toString()})',
-                                style: TextStyle(color: Colors.white),
-                              );
-
-                                })
-
-
-                            )
-                      ],
-                    ))),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(0),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: requestsRef
+                            .document(currentUser.id)
+                            .collection('userRequests')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return LoadingIndicator();
+                          }
+                          numberRequests = snapshot.data.documents.length;
+                          return Text(
+                            '(${numberRequests.toString()})',
+                            style: TextStyle(color: Colors.white),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
           leading: IconButton(
             icon: Icon(

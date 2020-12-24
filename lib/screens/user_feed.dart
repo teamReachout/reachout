@@ -71,8 +71,11 @@ class _UserFeedState extends State<UserFeed> {
         child: Appbar(),
         preferredSize: const Size.fromHeight(55),
       ),
-      body: SingleChildScrollView(
-        child: showTimeline(),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: showTimeline(),
+        ),
       )
       // body: CustomScrollView(
       //   slivers: <Widget>[

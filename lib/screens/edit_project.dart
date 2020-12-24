@@ -25,24 +25,12 @@ class _EditProjectState extends State<EditProject> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.fromLTRB(7, 12, 0, 0),
-          child: Text(
-            text.toUpperCase(),
-            // style: TextStyle(
-            //   color: Colors.grey,
-            // ),
-            style: kTextHeaderTextFields
-          ),
+          child: Text(text.toUpperCase(), style: kTextHeaderTextFields),
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
           child: textFieldFunction,
         )
-        // TextField(
-        //   controller: controller,
-        //   decoration: InputDecoration(
-        //     hintText: "Update Data",
-        //   ),
-        // ),
       ],
     );
   }
@@ -52,7 +40,6 @@ class _EditProjectState extends State<EditProject> {
   }
 
   updateProfileData() {
-    // print(widget.projectId);
     projectRef
         .document(currentUser.id)
         .collection('userProject')
@@ -86,42 +73,43 @@ class _EditProjectState extends State<EditProject> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        // Padding(
-        //   padding: EdgeInsets.only(
-        //     top: 16,
-        //     bottom: 8,
-        //   ),
-        //   child: CircleAvatar(
-        //     radius: 50,
-        //     backgroundImage: NetworkImage(currentUser.photoUrl),
-        //   ),
-        // ),
         Padding(
           padding: EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
-              buildField("Bio", multilineTextField('Bio', bioController)),
               buildField(
-                  "Email", singlelineTextField('Email', emailController)),
-              buildField("Why we started",
-                  multilineTextField('Your Story', whyController)),
+                "Bio",
+                multilineTextField('Bio', bioController),
+              ),
+              buildField(
+                "Email",
+                singlelineTextField('Email', emailController),
+              ),
+              buildField(
+                "Why we started",
+                multilineTextField('Your Story', whyController),
+              ),
             ],
           ),
         ),
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.fromLTRB(
+                0.0, 0.0, 10.0, MediaQuery.of(context).viewInsets.bottom),
             child: ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 elevation: MaterialStateProperty.all(0.0),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0))),
-                side:
-                    MaterialStateProperty.all(BorderSide(color: Colors.black)),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                side: MaterialStateProperty.all(
+                  BorderSide(color: Colors.black),
+                ),
                 padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
-                // minimumSize: MaterialStateProperty.all(Size(48.0, 32.0)),
               ),
               onPressed: updateProfileData,
               child: Text(
@@ -136,31 +124,6 @@ class _EditProjectState extends State<EditProject> {
             ),
           ),
         )
-        // RaisedButton(
-        //   onPressed: updateProfileData,
-        //   child: Text(
-        //     'Update',
-        //     style: TextStyle(
-        //       color: Colors.blue,
-        //       fontSize: 20,
-        //       fontWeight: FontWeight.bold,
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: RaisedButton(
-        //     onPressed: cancelUpdate,
-        //     child: Text(
-        //       'Cancel',
-        //       style: TextStyle(
-        //         color: Colors.blue,
-        //         fontSize: 20,
-        //         fontWeight: FontWeight.bold,
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

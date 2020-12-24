@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
-import 'package:reachout/main.dart';
 import 'package:reachout/models/education.dart';
 import 'package:reachout/models/experience.dart';
 import 'package:reachout/models/users.dart';
@@ -17,7 +16,6 @@ import 'package:reachout/widgets/experience_row.dart';
 import 'package:reachout/widgets/interests.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:reachout/screens/edit_user_work.dart';
 
 const Color headerColour = Colors.grey;
 
@@ -153,7 +151,10 @@ class _ProfilePageState extends State<ProfilePage> {
               ? IconButton(
                   icon: Icon(Icons.edit, color: Colors.black),
                   onPressed: text == 'Area of Work'
-                      ? () {modalSheetFunction(EditUserWork(profileId: currentUser.id)); }
+                      ? () {
+                          modalSheetFunction(
+                              EditUserWork(profileId: currentUser.id));
+                        }
                       : () {
                           modalSheetFunction(
                               EditProfile(profileId: currentUser.id));
@@ -773,7 +774,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      // appBar: appBar(),
       body: isLoading == true
           ? LoadingIndicator()
           : RefreshIndicator(
@@ -782,9 +782,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   DraggableScrollableSheet(
                     builder: (ctx, controller) {
                       return Container(
-                        // decoration: BoxDecoration(
-                        //   color: Color(0xffefefef),
-                        // ),
                         child: ListView(
                           controller: controller,
                           children: <Widget>[
@@ -963,7 +960,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   widget.profileId != currentUser.id
-                      ? null
+                      ? Text('')
                       : Positioned(
                           right: 3,
                           top: 20,

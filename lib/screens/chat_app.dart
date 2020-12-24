@@ -15,16 +15,15 @@ class ChatApp extends StatefulWidget {
   @override
   _ChatAppState createState() => _ChatAppState();
 
-  String recepientName()
-  {
-    recepient = receiver.firstName.toString() + ' ' + receiver.lastName.toString() ;
+  String recepientName() {
+    recepient =
+        receiver.firstName.toString() + ' ' + receiver.lastName.toString();
     return recepient;
   }
 }
 
 class _ChatAppState extends State<ChatApp> {
   String textMessage;
-  
 
   final textEditingControl = TextEditingController();
 
@@ -33,7 +32,6 @@ class _ChatAppState extends State<ChatApp> {
     super.initState();
     print(widget.receiver.firstName);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +53,10 @@ class _ChatAppState extends State<ChatApp> {
                     .collection('userChats')
                     .document(widget.sender.id)
                     .collection('userMessages')
+                    .orderBy(
+                      'time',
+                      descending: false,
+                    )
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData != true) {
@@ -65,11 +67,15 @@ class _ChatAppState extends State<ChatApp> {
                   for (var message in messages) {
                     final messageText = message.data['text'];
                     final messageSender = message.data['sender'];
-
+                    final messageTime = message.data['time'] as Timestamp;
                     final whoSent = currentUser.id;
 
                     final messageWidget = MessageBubble(
-                        messageText, messageSender, whoSent == messageSender);
+                      messageSender: messageSender,
+                      messageText: messageText,
+                      isMe: whoSent == messageSender,
+                      time: messageTime,
+                    );
                     textWidgets.add(messageWidget);
                   }
                   return Expanded(
@@ -106,6 +112,7 @@ class _ChatAppState extends State<ChatApp> {
                         'sender': widget.sender.id,
                         'text': textMessage,
                         'receiver': widget.receiver.id,
+                        'time': FieldValue.serverTimestamp(),
                       });
                       messagesRef
                           .document(widget.receiver.id)
@@ -116,6 +123,7 @@ class _ChatAppState extends State<ChatApp> {
                         'sender': widget.sender.id,
                         'text': textMessage,
                         'receiver': widget.receiver.id,
+                        'time': FieldValue.serverTimestamp(),
                       });
                     },
                     child: Text(
@@ -137,8 +145,9 @@ class MessageBubble extends StatelessWidget {
   final String messageText;
   final String messageSender;
   final bool isMe;
+  final Timestamp time;
 
-  MessageBubble(this.messageText, this.messageSender, this.isMe);
+  MessageBubble({this.messageText, this.messageSender, this.isMe, this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +157,7 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text('$messageSender',
+          Text('',
               style: TextStyle(
                 fontSize: 11.0,
                 color: Colors.black54,

@@ -6,7 +6,7 @@ import 'package:reachout/auth.dart';
 import 'package:reachout/models/education.dart';
 import 'package:reachout/models/experience.dart';
 import 'package:reachout/screens/notifications.dart';
-import 'package:reachout/screens/opportunities.dart';
+import 'package:reachout/screens/opportunities_screen.dart';
 import 'package:reachout/screens/upload.dart';
 import 'package:reachout/screens/user_feed.dart';
 import 'screens/profile_page.dart';
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
       );
     }
     if (index == 1) {
-      return Opportunities();
+      return OpportunitiesScreen();
     }
     if (index == 2) {
       return Upload();
