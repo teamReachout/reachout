@@ -9,27 +9,40 @@ class ChatApp extends StatefulWidget {
   final User sender;
   final User receiver;
 
+  String recepient;
+
   ChatApp({this.receiver, this.sender});
   @override
   _ChatAppState createState() => _ChatAppState();
+
+  String recepientName()
+  {
+    recepient = receiver.firstName.toString() + ' ' + receiver.lastName.toString() ;
+    return recepient;
+  }
 }
 
 class _ChatAppState extends State<ChatApp> {
   String textMessage;
+  
+
   final textEditingControl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    print(widget.receiver.firstName);
   }
+
 
   @override
   Widget build(BuildContext context) {
+    String name = widget.recepientName();
     return Scaffold(
       appBar: AppBar(
         leading: null,
-        title: Text('⚡️Chat'),
-        backgroundColor: Colors.lightBlueAccent,
+        title: Text(name),
+        backgroundColor: Color(0xFF393e46),
       ),
       body: SafeArea(
         child: Column(
@@ -143,7 +156,7 @@ class MessageBubble extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 10.0),
             child: Material(
-              color: isMe ? Colors.blueAccent : Colors.white,
+              color: isMe ? Color(0xFF880E4F) : Colors.grey[200],
               elevation: 5.0,
               borderRadius: isMe
                   ? BorderRadius.only(

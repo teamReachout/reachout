@@ -1,17 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
-import 'package:reachout/models/constants.dart';
 import 'package:reachout/screens/requests_page.dart';
-import 'package:reachout/widgets/appbar.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:reachout/widgets/notification_item.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:reachout/screens/requests_page.dart';
+import 'package:reachout/widgets/search.dart';
 
-//THIS IS A TEST TO CHECK GITHUB OUT CAUSE WHY NOT OSOMEONE STOP ME FROM TYPONG CAUSE NOW I'M WASTING TIME
+
 
 class Notifications extends StatefulWidget {
   @override
@@ -20,11 +17,14 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   Future getNotifications;
+  int numberRequests;
   @override
   void initState() {
     super.initState();
     getNotifications = getActivityFeed();
   }
+
+
 
   getActivityFeed() async {
     QuerySnapshot snapshot = await activityFeedRef
@@ -47,8 +47,8 @@ class _NotificationsState extends State<Notifications> {
     );
   }
 
-  goToRequests() {
-    Navigator.of(context).push(
+  goToRequests() async {
+    await Navigator.of(context).push(
       MaterialPageRoute(builder: (ctx) => RequestsPage()),
     );
   }
@@ -57,34 +57,81 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        child: Appbar(),
-        preferredSize: const Size.fromHeight(44),
+        child: AppBar(
+          centerTitle: true,
+          toolbarOpacity: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: const Radius.circular(7),
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: goToRequests,
+                child: Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(0),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Icon(
+                              CupertinoIcons.person,
+                              color: const Color.fromRGBO(244, 248, 245, 1),
+                            ),
+                          ),
+                        ),
+                        Container(
+                            margin: EdgeInsets.all(0),
+                            child: StreamBuilder<QuerySnapshot>(
+
+                                stream: requestsRef
+                                    .document(currentUser.id)
+                                    .collection('userRequests').
+                                    snapshots(),
+                                builder: (context, snapshot) {
+                                  if(!snapshot.hasData)
+                                  {
+                                    return LoadingIndicator();
+                                  }
+                                 numberRequests = snapshot.data.documents.length;
+                                 return Text(
+                                '(${numberRequests.toString()})',
+                                style: TextStyle(color: Colors.white),
+                              );
+
+                                })
+
+
+                            )
+                      ],
+                    ))),
+          ],
+          leading: IconButton(
+            icon: Icon(
+              Icons.search,
+              color: const Color.fromRGBO(244, 248, 245, 1),
+            ),
+            onPressed: () => showSearch(
+              context: context,
+              delegate: Search(),
+            ),
+          ),
+          primary: true,
+          title: Text('Reachout'.toUpperCase(),
+              style: GoogleFonts.roboto(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300,
+                  color: const Color.fromRGBO(244, 248, 245, 1),
+                  letterSpacing: 1.2)),
+        ),
+        preferredSize: const Size.fromHeight(55),
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 5.0, 6.0, 6.0),
-            alignment: Alignment.centerRight,
-            child: OutlinedButton(
-              // onPressed: 
-              onPressed:  goToRequests,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
-                // elevation: MaterialStateProperty.all(2.0),
-                padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
-                shape: MaterialStateProperty.all(ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.circular(2))),
-              ),
-              child: Text(
-                'YOUR REQUESTS',
-                style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                    fontSize: 16,
-                    color: Colors.white),
-              ),
-            ),
-          ),
           Flexible(
             child: Container(
               child: FutureBuilder(

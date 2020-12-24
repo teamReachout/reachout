@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/widgets/user_chat.dart';
@@ -45,61 +46,64 @@ class _ChatListState extends State<ChatList> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SafeArea(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 10,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Chats',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+              child: Container(
+                color: Color(0xFF393e46),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 16,
+                    bottom: 14
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'CHATS',
+                        style: GoogleFonts.roboto(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.8),
                       ),
-                    ),
-                    Container(
-                      height: 30,
-                      color: Colors.pink[50],
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.add,
-                            color: Colors.pink,
-                          ),
-                          Text('New')
-                        ],
+                      Icon(
+                        Icons.add_sharp,
+                        size: 34,
+                        color: Colors.white,
+                        // color: Colors.pink,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
               child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search",
-                  hintStyle: TextStyle(color: Colors.grey),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey,
-                  contentPadding: EdgeInsets.all(8),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              ),
+                  decoration: InputDecoration(
+                      focusColor: Colors.red,
+                      hintText: "Search",
+                      hintStyle: TextStyle(color: Colors.black),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(0))),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.0),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))))),
             ),
             ListView.builder(
               itemCount: chats.length,

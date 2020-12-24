@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/users.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RequestsPage extends StatefulWidget {
   @override
@@ -10,15 +11,12 @@ class RequestsPage extends StatefulWidget {
 
 class _RequestsPageState extends State<RequestsPage> {
   List<User> requests = [];
-
   int numberOfRequests;
 
   @override
   void initState() {
     super.initState();
     getUserRequests();
-    numberOfRequests = requests.length;
-    print(numberOfRequests);
   }
 
   getUserRequests() async {
@@ -26,6 +24,8 @@ class _RequestsPageState extends State<RequestsPage> {
         .document(currentUser.id)
         .collection('userRequests')
         .getDocuments();
+         int number = doc.documents.length;
+         print(number);
     doc.documents.forEach((doc) async {
       DocumentSnapshot documentSnapshot =
           await usersRef.document(doc.documentID).get();
@@ -35,6 +35,11 @@ class _RequestsPageState extends State<RequestsPage> {
         );
       });
     });
+  }
+
+  int requestNumber() {
+    numberOfRequests = requests.length;
+    return numberOfRequests;
   }
 
   deleteRequest(String reqId) {
@@ -125,6 +130,25 @@ class _RequestsPageState extends State<RequestsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: const Color.fromRGBO(244, 248, 245, 1),
+          ),
+          onPressed: () {
+            Navigator.pop(context, requestNumber());
+          }
+          ),
+        primary: true,
+        title: Text('FOLLOW REQUESTS'.toUpperCase(),
+            style: GoogleFonts.roboto(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: const Color.fromRGBO(244, 248, 245, 1),
+                letterSpacing: 1.2)),
+      ),
       body: Container(
         child: ListView.builder(
           itemCount: requests.length,

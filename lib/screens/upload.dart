@@ -175,7 +175,7 @@ class _UploadState extends State<Upload> {
             primary: true,
           ),
         ),
-        preferredSize: Size.fromHeight(44),
+        preferredSize: Size.fromHeight(55),
       ),
       body: isUploading
           ? LoadingIndicator()
