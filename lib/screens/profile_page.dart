@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -448,13 +449,9 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white70,
           ),
         ),
-        child: Text(
-          text.toUpperCase(),
-          style: GoogleFonts.roboto(
-            color: Colors.white,
-            fontWeight: FontWeight.w600
-          )
-        ),
+        child: Text(text.toUpperCase(),
+            style: GoogleFonts.roboto(
+                color: Colors.white, fontWeight: FontWeight.w600)),
       ),
     );
   }
@@ -558,6 +555,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (!gotData) {
       getUser();
       getProject();
+      projectImages();
     }
     getFollowers();
     getFollowing();
@@ -753,6 +751,23 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  projectImages() async {
+    setState(() {
+      isLoading = true;
+    });
+    projectPhotos = {};
+    QuerySnapshot doc = await projectRef
+        .document(widget.profileId)
+        .collection('userProject')
+        .getDocuments();
+    doc.documents.forEach((proj) {
+      projectPhotos[proj.data['name']] = proj.data['photoUrl'];
+    });
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   buildProjects() {
     Iterable<String> projectNames = project.keys;
     return Column(
@@ -764,7 +779,9 @@ class _ProfilePageState extends State<ProfilePage> {
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(''),
+                  backgroundImage: projectPhotos[name] == null
+                      ? NetworkImage('')
+                      : CachedNetworkImageProvider(projectPhotos[name]),
                 ),
                 title: Text(name),
               ),
@@ -774,36 +791,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
   }
-
-  buildProjects2() {
-    Iterable<String> projectNames = project.keys;
-    return Column(
-      children: <Widget>[
-        ...projectNames.map(
-          (name) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text(name),
-              ),
-            );
-          },
-        ).toList(),
-      ],
-    );
-  }
-
-  // buildCollaborator() {
-  //   return Column(
-  //     children: <Widget>[
-  //       ...collaborators
-  //           .map(
-  //             (collaborator) => UserCard(user: collaborator),
-  //           )
-  //           .toList(),
-  //     ],
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -996,11 +983,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   widget.profileId != currentUser.id
                       ? Container(
-                        height: 0,
-                        width: 0,
-                        child: Text(''
-                        ),
-                      )
+                          height: 0,
+                          width: 0,
+                          child: Text(''),
+                        )
                       : Positioned(
                           right: 3,
                           top: 20,
@@ -1050,12 +1036,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               EdgeInsets.fromLTRB(0, 18, 0, 10),
                                           child: Container(
                                             alignment: Alignment.center,
-                                            child: Text('PROJECTS',
-                                                style: GoogleFonts.roboto(
-                                                  fontSize: 20,
-                                                  letterSpacing: 0.8,
-                                                  fontWeight: FontWeight.w300,
-                                                )),
+                                            child: Text(
+                                              'PROJECTS',
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 20,
+                                                letterSpacing: 0.8,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         buildProjects(),

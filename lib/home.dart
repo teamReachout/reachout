@@ -40,6 +40,7 @@ User profile; // Profile Page visiting
 List<Experience> experiences = [];
 List<Education> educations = [];
 Map<String, String> project = {};
+Map<String, String> projectPhotos = {};
 
 class Home extends StatefulWidget {
   final BaseAuth auth;
