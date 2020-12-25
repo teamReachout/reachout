@@ -157,11 +157,13 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text('',
-              style: TextStyle(
-                fontSize: 11.0,
-                color: Colors.black54,
-              )),
+          Text(
+            '',
+            style: TextStyle(
+              fontSize: 11.0,
+              color: Colors.black54,
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(bottom: 10.0),
             child: Material(
@@ -180,10 +182,13 @@ class MessageBubble extends StatelessWidget {
                     ),
               child: Padding(
                 padding: EdgeInsets.all(12.0),
-                child: Text('$messageText',
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        color: isMe ? Colors.white : Colors.black)),
+                child: Text(
+                  '$messageText',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: isMe ? Colors.white : Colors.black,
+                  ),
+                ),
               ),
             ),
           ),

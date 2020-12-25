@@ -7,6 +7,7 @@ import 'package:reachout/models/education.dart';
 import 'package:reachout/models/experience.dart';
 import 'package:reachout/screens/notifications.dart';
 import 'package:reachout/screens/opportunities_screen.dart';
+import 'package:reachout/screens/problems_screen.dart';
 import 'package:reachout/screens/upload.dart';
 import 'package:reachout/screens/user_feed.dart';
 import 'screens/profile_page.dart';
@@ -16,6 +17,7 @@ final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
 final projectPostsRef = Firestore.instance.collection('projectPosts');
 final commentsRef = Firestore.instance.collection('comments');
+final answersRef = Firestore.instance.collection('answers');
 final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
 final followingRef = Firestore.instance.collection('following');
@@ -24,6 +26,7 @@ final timelineRef = Firestore.instance.collection('timeline');
 final projectRef = Firestore.instance.collection('projects');
 final messagesRef = Firestore.instance.collection('messages');
 final requestsRef = Firestore.instance.collection('requests');
+final problemsRef = Firestore.instance.collection('problems');
 final storageRef = FirebaseStorage.instance.ref();
 final timestamp = DateTime.now();
 bool gotData = false;
@@ -70,7 +73,7 @@ class _HomeState extends State<Home> {
       return OpportunitiesScreen();
     }
     if (index == 2) {
-      return Upload();
+      return ProblemsScreen();
     }
     if (index == 3) {
       return Notifications();
