@@ -105,7 +105,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
     return Scaffold(
       appBar: PreferredSize(
         child: Appbar(),
-        preferredSize: const Size.fromHeight(44),
+        preferredSize: const Size.fromHeight(55),
       ),
       body: Column(
         children: <Widget>[
