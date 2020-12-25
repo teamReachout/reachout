@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3fZ_ebLrIR7-37WMGcyj_RO-0TTcZGtUKtg&usqp=CAU';
   bool isLoading;
   bool isCurrentUser;
-  List<String> lists = ['New Project', 'Sign Out'];
+  List<String> lists = ['Sign Out'];
 
   createColumn(int numb, String text) {
     return Column(
@@ -585,7 +585,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       isLoading = true;
     });
-    lists = ['Create New Project', 'Sign Out'];
+    lists = [ 'Sign Out'];
     project = {};
     QuerySnapshot doc = await projectRef
         .document(widget.profileId)
@@ -728,27 +728,29 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void choiceAction(String choice) {
-    if (choice == 'Create New Project') {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => CreateProjectPage(
-            profileId: widget.profileId,
-          ),
-        ),
-      );
-    } else if (choice == 'Sign Out') {
+    // if (choice == 'Create New Project') {
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(
+    //       builder: (context) => CreateProjectPage(
+    //         profileId: widget.profileId,
+    //       ),
+    //     ),
+    //   );
+    //}
+      if (choice == 'Sign Out') {
       widget.onSignedOut();
-    } else {
-      String id = project[choice];
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ProjectPage(
-            profileId: widget.profileId,
-            projectId: id,
-          ),
-        ),
-      );
     }
+    //  else {
+    //   String id = project[choice];
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(
+    //       builder: (context) => ProjectPage(
+    //         profileId: widget.profileId,
+    //         projectId: id,
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   projectImages() async {
@@ -776,14 +778,27 @@ class _ProfilePageState extends State<ProfilePage> {
           (name) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: projectPhotos[name] == null
-                      ? NetworkImage('')
-                      : CachedNetworkImageProvider(projectPhotos[name]),
+              child: GestureDetector(
+                onTap: () {
+                  String id = project[name];
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProjectPage(
+                        profileId: widget.profileId,
+                        projectId: id,
+                      ),
+                    ),
+                  );
+                },
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: projectPhotos[name] == null
+                        ? NetworkImage('')
+                        : CachedNetworkImageProvider(projectPhotos[name]),
+                  ),
+                  title: Text(name),
                 ),
-                title: Text(name),
               ),
             );
           },

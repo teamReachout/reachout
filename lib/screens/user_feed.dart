@@ -5,6 +5,8 @@ import 'package:reachout/models/users.dart';
 import 'package:reachout/widgets/appbar.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:reachout/widgets/post.dart';
+import 'package:reachout/screens/upload.dart';
+import 'package:flutter_tags/src/tags.dart';
 
 class UserFeed extends StatefulWidget {
   final User currentUser;
@@ -74,7 +76,12 @@ class _UserFeedState extends State<UserFeed> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: showTimeline(),
+          child: Column(
+            children: [
+              
+              showTimeline(),
+            ],
+          ),
         ),
       )
       // body: CustomScrollView(
