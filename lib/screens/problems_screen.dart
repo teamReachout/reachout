@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
-import 'package:reachout/models/constants.dart';
 import 'package:reachout/screens/add_problems.dart';
-import 'package:reachout/widgets/appbar.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:reachout/widgets/problems.dart';
 

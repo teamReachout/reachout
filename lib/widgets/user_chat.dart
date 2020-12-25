@@ -3,8 +3,8 @@ import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/chat_app.dart';
 
 class UserChat extends StatefulWidget {
-  User sender;
-  User reciever;
+  final User sender;
+  final User reciever;
 
   UserChat({
     this.sender,

@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:image/image.dart' as Im;
-import 'package:reachout/models/constants.dart';
 import 'package:reachout/widgets/loading_indicator.dart';
 import 'dart:io';
 import 'package:uuid/uuid.dart';

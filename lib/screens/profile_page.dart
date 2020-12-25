@@ -585,7 +585,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       isLoading = true;
     });
-    lists = [ 'Sign Out'];
+    lists = ['Sign Out'];
     project = {};
     QuerySnapshot doc = await projectRef
         .document(widget.profileId)
@@ -593,7 +593,7 @@ class _ProfilePageState extends State<ProfilePage> {
         .getDocuments();
     doc.documents.forEach((proj) {
       project[proj.data['name']] = proj.documentID;
-      lists.add(proj.data['name']);
+      // lists.add(proj.data['name']);
     });
     setState(() {
       isLoading = false;
@@ -737,7 +737,7 @@ class _ProfilePageState extends State<ProfilePage> {
     //     ),
     //   );
     //}
-      if (choice == 'Sign Out') {
+    if (choice == 'Sign Out') {
       widget.onSignedOut();
     }
     //  else {
@@ -809,293 +809,296 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: isLoading == true
-          ? LoadingIndicator()
-          : RefreshIndicator(
-              child: Stack(
-                children: <Widget>[
-                  DraggableScrollableSheet(
-                    builder: (ctx, controller) {
-                      return Container(
-                        child: ListView(
-                          controller: controller,
-                          children: <Widget>[
-                            Card(
-                              color: headerColour,
-                              elevation: 0,
-                              margin: EdgeInsets.fromLTRB(1, 0, 1, 0),
-                              child: _buildTopHeader(
-                                  'About', Icons.person_outline),
-                            ),
-                            Card(
-                              margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
-                              color: Colors.grey[200],
-                              elevation: 0.0,
-                              child: Column(
-                                children: [buildAboutUser()],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        body: isLoading == true
+            ? LoadingIndicator()
+            : RefreshIndicator(
+                child: Stack(
+                  children: <Widget>[
+                    DraggableScrollableSheet(
+                      builder: (ctx, controller) {
+                        return Container(
+                          child: ListView(
+                            controller: controller,
+                            children: <Widget>[
+                              Card(
+                                color: headerColour,
+                                elevation: 0,
+                                margin: EdgeInsets.fromLTRB(1, 0, 1, 0),
+                                child: _buildTopHeader(
+                                    'About', Icons.person_outline),
                               ),
-                            ),
-                            Card(
-                              color: headerColour,
-                              elevation: 0,
-                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
-                              child: _buildTopHeader(
-                                  'Area of Work', Icons.desktop_windows),
-                            ),
-                            Card(
-                              margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
-                              color: Colors.grey[200],
-                              elevation: 0.0,
-                              child: Column(
-                                children: [
-                                  buildAreaOfWork(),
-                                ],
-                              ),
-                            ),
-
-                            Card(
-                              color: headerColour,
-                              elevation: 0,
-                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
-                              child: _buildTimelineHeader(
-                                  'Experience', MdiIcons.briefcaseOutline),
-                            ),
-
-                            Column(
-                              children: [
-                                Card(
-                                  margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
-                                  color: Colors.grey[200],
-                                  elevation: 0.0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 20.0),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        _buildTimeline(),
-                                        buildExperience(),
-                                      ],
-                                    ),
-                                  ),
+                              Card(
+                                margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                                color: Colors.grey[200],
+                                elevation: 0.0,
+                                child: Column(
+                                  children: [buildAboutUser()],
                                 ),
-                              ],
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(
-                            //     top: 8.0,
-                            //     bottom: 8.0,
-                            //   ),
-                            //   child: Divider(
-                            //     thickness: 2,
-                            //   ),
-                            // ),
-
-                            Card(
-                              color: headerColour,
-                              elevation: 0,
-                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
-                              child: _buildTimelineHeader(
-                                  'Education', MdiIcons.schoolOutline),
-                            ),
-                            Card(
-                              color: Colors.grey[200],
-                              margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
-                              elevation: 0.5,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20.0),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        _buildTimeline(),
-                                        buildEducation(),
-                                      ],
-                                    ),
-                                  ),
-                                ],
                               ),
-                            ),
-
-                            Card(
-                              color: headerColour,
-                              elevation: 0,
-                              margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
-                              child:
-                                  _buildTopHeader('Projects', Icons.group_work),
-                            ),
-                            Card(
-                              color: Colors.grey[200],
-                              margin: EdgeInsets.fromLTRB(1, 0, 1, 2),
-                              elevation: 0.5,
-                              child: Column(
-                                children: [buildProjects()],
-                              ),
-                            ),
-
-                            // buildDivider(),
-                            Card(
+                              Card(
                                 color: headerColour,
                                 elevation: 0,
                                 margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
-                                child: _buildTopHeader('Contact', Icons.phone)),
-                            Card(
-                              color: Colors.grey[200],
-                              margin: EdgeInsets.fromLTRB(1, 0, 1, 0),
-                              elevation: 0.5,
-                              child: Column(
+                                child: _buildTopHeader(
+                                    'Area of Work', Icons.desktop_windows),
+                              ),
+                              Card(
+                                margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                                color: Colors.grey[200],
+                                elevation: 0.0,
+                                child: Column(
+                                  children: [
+                                    buildAreaOfWork(),
+                                  ],
+                                ),
+                              ),
+
+                              Card(
+                                color: headerColour,
+                                elevation: 0,
+                                margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                                child: _buildTimelineHeader(
+                                    'Experience', MdiIcons.briefcaseOutline),
+                              ),
+
+                              Column(
                                 children: [
-                                  buildContactInfo(),
+                                  Card(
+                                    margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                                    color: Colors.grey[200],
+                                    elevation: 0.0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 20.0),
+                                      child: Stack(
+                                        children: <Widget>[
+                                          _buildTimeline(),
+                                          buildExperience(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //     top: 8.0,
+                              //     bottom: 8.0,
+                              //   ),
+                              //   child: Divider(
+                              //     thickness: 2,
+                              //   ),
+                              // ),
 
-                            // SizedBox(
-                            //   height: 25,
-                            //   width: double.infinity,
-                            // ),
+                              Card(
+                                color: headerColour,
+                                elevation: 0,
+                                margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                                child: _buildTimelineHeader(
+                                    'Education', MdiIcons.schoolOutline),
+                              ),
+                              Card(
+                                color: Colors.grey[200],
+                                margin: EdgeInsets.fromLTRB(1, 0, 1, 5),
+                                elevation: 0.5,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 20.0),
+                                      child: Stack(
+                                        children: <Widget>[
+                                          _buildTimeline(),
+                                          buildEducation(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              Card(
+                                color: headerColour,
+                                elevation: 0,
+                                margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                                child: _buildTopHeader(
+                                    'Projects', Icons.group_work),
+                              ),
+                              Card(
+                                color: Colors.grey[200],
+                                margin: EdgeInsets.fromLTRB(1, 0, 1, 2),
+                                elevation: 0.5,
+                                child: Column(
+                                  children: [buildProjects()],
+                                ),
+                              ),
+
+                              // buildDivider(),
+                              Card(
+                                  color: headerColour,
+                                  elevation: 0,
+                                  margin: EdgeInsets.fromLTRB(1, 5, 1, 0),
+                                  child:
+                                      _buildTopHeader('Contact', Icons.phone)),
+                              Card(
+                                color: Colors.grey[200],
+                                margin: EdgeInsets.fromLTRB(1, 0, 1, 0),
+                                elevation: 0.5,
+                                child: Column(
+                                  children: [
+                                    buildContactInfo(),
+                                  ],
+                                ),
+                              ),
+
+                              // SizedBox(
+                              //   height: 25,
+                              //   width: double.infinity,
+                              // ),
+                            ],
+                          ),
+                        );
+                      },
+                      initialChildSize: 0.725,
+                      minChildSize: 0.725,
+                      expand: true,
+                      maxChildSize: 1,
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.only(top: 30),
+                        decoration: BoxDecoration(
+                          color: Color(0xFF393e46),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.zero,
+                              topRight: Radius.zero,
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          //  border: Border.all(color: Color(0xFF880E4F), width: 2),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            buildProfileHeader(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 38,
+                                left: 38,
+                                top: 15,
+                                bottom: 18,
+                              ),
+                              child: buildProfileData(),
+                            ),
                           ],
                         ),
-                      );
-                    },
-                    initialChildSize: 0.725,
-                    minChildSize: 0.725,
-                    expand: true,
-                    maxChildSize: 1,
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: EdgeInsets.only(top: 30),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF393e46),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.zero,
-                            topRight: Radius.zero,
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20)),
-                        //  border: Border.all(color: Color(0xFF880E4F), width: 2),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          buildProfileHeader(),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              right: 38,
-                              left: 38,
-                              top: 15,
-                              bottom: 18,
-                            ),
-                            child: buildProfileData(),
-                          ),
-                        ],
                       ),
                     ),
-                  ),
-                  widget.profileId != currentUser.id
-                      ? Container(
-                          height: 0,
-                          width: 0,
-                          child: Text(''),
-                        )
-                      : Positioned(
-                          right: 3,
-                          top: 20,
-                          child: Container(
-                            height: 60,
-                            width: 60,
-                            child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: PopupMenuButton(
-                                color: Colors.grey[200],
-                                itemBuilder: (BuildContext context) {
-                                  return lists.map((choice) {
-                                    return PopupMenuItem(
-                                      value: choice,
-                                      child: Text(choice),
-                                    );
-                                  }).toList();
-                                },
-                                onSelected: choiceAction,
-                                // captureInheritedThemes: color,
-                                icon: Icon(
-                                  Icons.menu,
-                                  color: Colors.white,
+                    widget.profileId != currentUser.id
+                        ? Container(
+                            height: 0,
+                            width: 0,
+                            child: Text(''),
+                          )
+                        : Positioned(
+                            right: 3,
+                            top: 20,
+                            child: Container(
+                              height: 60,
+                              width: 60,
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: PopupMenuButton(
+                                  color: Colors.grey[200],
+                                  itemBuilder: (BuildContext context) {
+                                    return lists.map((choice) {
+                                      return PopupMenuItem(
+                                        value: choice,
+                                        child: Text(choice),
+                                      );
+                                    }).toList();
+                                  },
+                                  onSelected: choiceAction,
+                                  // captureInheritedThemes: color,
+                                  icon: Icon(
+                                    Icons.menu,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                  widget.profileId != currentUser.id
-                      ? Text('')
-                      : Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: Container(
-                            height: 60,
-                            width: 60,
-                            child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: FloatingActionButton(
-                                onPressed: () {
-                                  modalSheetFunction(
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(0, 18, 0, 10),
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'PROJECTS',
-                                              style: GoogleFonts.roboto(
-                                                fontSize: 20,
-                                                letterSpacing: 0.8,
-                                                fontWeight: FontWeight.w300,
+                    widget.profileId != currentUser.id
+                        ? Text('')
+                        : Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: Container(
+                              height: 60,
+                              width: 60,
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: FloatingActionButton(
+                                  onPressed: () {
+                                    modalSheetFunction(
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0, 18, 0, 10),
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                'PROJECTS',
+                                                style: GoogleFonts.roboto(
+                                                  fontSize: 20,
+                                                  letterSpacing: 0.8,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        buildProjects(),
-                                        Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(6, 10, 0, 6),
-                                          child: ListTile(
-                                              leading: Icon(
-                                                Icons.add_circle_outline,
-                                                size: 50,
-                                              ),
-                                              title: Text('Add Project'),
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CreateProjectPage(
-                                                      profileId:
-                                                          widget.profileId,
+                                          buildProjects(),
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                6, 10, 0, 6),
+                                            child: ListTile(
+                                                leading: Icon(
+                                                  Icons.add_circle_outline,
+                                                  size: 50,
+                                                ),
+                                                title: Text('Add Project'),
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CreateProjectPage(
+                                                        profileId:
+                                                            widget.profileId,
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              }),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                child: Icon(CupertinoIcons.add, size: 40),
+                                                  );
+                                                }),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(CupertinoIcons.add, size: 40),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
+                onRefresh: refresh,
               ),
-              onRefresh: refresh,
-            ),
+      ),
     );
   }
 }

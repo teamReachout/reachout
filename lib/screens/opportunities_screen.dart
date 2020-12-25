@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/models/opportunities.dart';
-import 'package:reachout/widgets/appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:reachout/screens/chat_list.dart';
 import 'package:reachout/widgets/search.dart';
 
 class OpportunitiesScreen extends StatefulWidget {

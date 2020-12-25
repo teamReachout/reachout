@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
-import 'package:reachout/models/constants.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/comments.dart';
 import 'package:reachout/screens/profile_page.dart';
@@ -576,8 +575,7 @@ class _PostState extends State<Post> {
     print(reachoutAns1);
     bool isValid = _reachoutKey.currentState.validate();
     if (isValid) {
-      reachoutMessage =
-          'This is a Reachout message\n\n';
+      reachoutMessage = 'This is a Reachout message\n\n';
       String textMessage = reachoutMessage +
           reachoutQ1.toUpperCase() +
           ':\n' +
@@ -599,7 +597,7 @@ class _PostState extends State<Post> {
         'sender': currentUser.id,
         'text': textMessage,
         'receiver': ownerId,
-         'time': FieldValue.serverTimestamp(),
+        'time': FieldValue.serverTimestamp(),
       });
       messagesRef
           .document(ownerId)
@@ -610,7 +608,7 @@ class _PostState extends State<Post> {
         'sender': currentUser.id,
         'text': textMessage,
         'receiver': ownerId,
-         'time': FieldValue.serverTimestamp(),
+        'time': FieldValue.serverTimestamp(),
       });
       leaveReachout();
     }
@@ -802,7 +800,6 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context).size;
-    // print(deviceData);
     isLiked = (likes[currentUserId] == true);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),

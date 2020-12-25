@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/project.dart';
-import 'package:reachout/models/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditProjectWork extends StatefulWidget {

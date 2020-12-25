@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
-import 'package:reachout/models/constants.dart';
 import 'package:reachout/models/project.dart';
 import 'package:reachout/models/users.dart';
 import 'package:reachout/screens/edit_project.dart';
@@ -106,7 +105,6 @@ class _ProjectPageState extends State<ProjectPage> {
   List<User> collaborators = [];
   List<String> posts = [];
   Project proj;
-  int _widgetIndex = 0;
 
   createColumn(int numb, String text) {
     return Column(

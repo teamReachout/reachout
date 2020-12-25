@@ -8,7 +8,6 @@ import 'package:reachout/models/experience.dart';
 import 'package:reachout/screens/notifications.dart';
 import 'package:reachout/screens/opportunities_screen.dart';
 import 'package:reachout/screens/problems_screen.dart';
-import 'package:reachout/screens/upload.dart';
 import 'package:reachout/screens/user_feed.dart';
 import 'screens/profile_page.dart';
 import 'models/users.dart';
@@ -107,20 +106,23 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(MdiIcons.homeCircleOutline),
               activeIcon: Icon(MdiIcons.homeCircle),
+              // ignore: deprecated_member_use
               title: Container(
                 height: 0,
               ),
             ),
             BottomNavigationBarItem(
-              icon: Icon(MdiIcons.clipboardList),
-              activeIcon: Icon(MdiIcons.clipboardListOutline),
+              icon: Icon(MdiIcons.clipboardListOutline),
+              activeIcon: Icon(MdiIcons.clipboardList),
+              // ignore: deprecated_member_use
               title: Container(
                 height: 0,
               ),
             ),
             BottomNavigationBarItem(
-             icon: Icon(MdiIcons.helpCircleOutline),
+              icon: Icon(MdiIcons.helpCircleOutline),
               activeIcon: Icon(MdiIcons.helpCircle),
+              // ignore: deprecated_member_use
               title: Container(
                 height: 0,
               ),
@@ -128,6 +130,7 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(MdiIcons.viewCarouselOutline),
               activeIcon: Icon(MdiIcons.viewCarousel),
+              // ignore: deprecated_member_use
               title: Container(
                 height: 0,
               ),
@@ -135,6 +138,7 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
               activeIcon: Icon(Icons.person),
+              // ignore: deprecated_member_use
               title: Container(
                 height: 0,
               ),
