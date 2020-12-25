@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:google_fonts/google_fonts.dart';
 
 class Answer extends StatelessWidget {
   final String userName;
@@ -28,19 +29,32 @@ class Answer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListTile(
-          title: Text(userName),
-          subtitle: Text(answer),
-          trailing: Text(
-            timeago.format(
-              timestamp.toDate(),
+        Container(
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(width: 0.2, color: Colors.black26) )
+          ),
+          child: ListTile(
+            title: Padding(
+              padding: EdgeInsets.only(top: 4.0),
+              child: Text(userName,
+                  style: GoogleFonts.roboto(fontWeight: FontWeight.w700)),
+            ),
+            subtitle: Text(answer,
+                style: GoogleFonts.roboto(
+                  fontSize: 16,
+                )),
+            trailing: Text(
+              timeago.format(
+                timestamp.toDate(),
+              ),
             ),
           ),
         ),
-        Divider(
-          color: Colors.black,
-          thickness: 1,
-        ),
+        // Divider(
+        //   endIndent: 0,
+        //   indent: 0,
+        //   color: Colors.black12,
+        // )
       ],
     );
   }

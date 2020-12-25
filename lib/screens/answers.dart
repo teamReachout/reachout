@@ -62,7 +62,7 @@ class _AnswersState extends State<Answers> {
           Expanded(
             child: buildAnswers(),
           ),
-          Divider(),
+          // Divider(),
           ListTile(
             title: Form(
               key: _formKey,

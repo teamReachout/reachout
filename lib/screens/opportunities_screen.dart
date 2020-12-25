@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/models/opportunities.dart';
 import 'package:reachout/widgets/appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:reachout/screens/chat_list.dart';
+import 'package:reachout/widgets/search.dart';
 
 class OpportunitiesScreen extends StatefulWidget {
   @override
@@ -33,8 +36,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
       name: 'Harvard College Project for Asian and International Relations',
       description:
           'Our mission is simple: we connect the top leaders of today and tomorrow in a dynamic forum of exchange.',
-      link:
-          'https://hpair.org/',
+      link: 'https://hpair.org/',
     ),
     Opportunities(
       name: 'Meraki 2020- Unique Business Plan Competition',
@@ -47,8 +49,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
       name: 'ESUMMIT\'21 EMBRACING EVOLUTION',
       description:
           'E-Summit being the flagship event of ECell, is held annually brings together the academic community, venture capitalists, new age entrepreneurs and all those passionate about entrepreneurship to common grounds.',
-      link:
-          'https://esummit.in/',
+      link: 'https://esummit.in/',
     ),
   ];
 
@@ -69,33 +70,48 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: ListTile(
-            autofocus: true,
-            enabled: true,
-            title: Text(
-              o.name,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
+          padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+          child: Card(
+            margin: EdgeInsets.all(0),
+            elevation: 0.5,
+            child: ListTile(
+              autofocus: true,
+              enabled: true,
+              title: Stack(children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      o.name.toUpperCase(),
+                      style: GoogleFonts.roboto(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      )
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 1,
+                  top: 2,
+                  child: Icon(Icons.link_sharp, size: 20, color: Color(0xFF880E4F)),
+                )
+              ]),
+              subtitle: Padding(
+                padding: EdgeInsets.only(bottom: 4.0),
+                child: Text(
+                  o.description,
+                  style: GoogleFonts.roboto(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  )
+                ),
               ),
+              onTap: () => goToLink(o.link),
             ),
-            subtitle: Text(
-              o.description,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            onTap: () => goToLink(o.link),
           ),
         ),
-        Divider(
-          thickness: 1,
-          indent: 25,
-          endIndent: 25,
-          color: Colors.black,
-        )
       ],
     );
   }
@@ -103,8 +119,34 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
-        child: Appbar(),
+        child: AppBar(
+          centerTitle: true,
+          toolbarOpacity: 1.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: const Radius.circular(7),
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.search,
+              color: const Color.fromRGBO(244, 248, 245, 1),
+            ),
+            onPressed: () => showSearch(
+              context: context,
+              delegate: Search(),
+            ),
+          ),
+          primary: true,
+          title: Text('opportunities'.toUpperCase(),
+              style: GoogleFonts.roboto(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300,
+                  color: const Color.fromRGBO(244, 248, 245, 1),
+                  letterSpacing: 1.2)),
+        ),
         preferredSize: const Size.fromHeight(55),
       ),
       body: Column(
