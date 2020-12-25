@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:reachout/home.dart';
@@ -128,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildTopHeader(String text, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: 8.0,
         vertical: 2.0,
       ),
@@ -136,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 15.0),
+              padding: EdgeInsets.only(left: 15.0),
               child: Text(
                 text,
                 style: TextStyle(
@@ -162,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
               : Icon(icon, color: Colors.black),
           Padding(
-            padding: const EdgeInsets.only(right: 15.0),
+            padding: EdgeInsets.only(right: 15.0),
           ),
         ],
       ),
@@ -202,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ) //editTimeline(text),
                   )
-              : Icon(icon, color: Colors.white),
+              : Icon(icon, color: Colors.black),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
           ),
@@ -433,8 +434,8 @@ class _ProfilePageState extends State<ProfilePage> {
       onPressed: function,
       child: Container(
         padding: EdgeInsets.only(
-          left: 18,
-          right: 18,
+          left: 14,
+          right: 14,
           top: 8,
           bottom: 8,
         ),
@@ -444,15 +445,15 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           color: Colors.transparent,
           border: Border.all(
-            color: Colors.blue,
+            color: Colors.white70,
           ),
         ),
         child: Text(
-          text,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+          text.toUpperCase(),
+          style: GoogleFonts.roboto(
+            color: Colors.white,
+            fontWeight: FontWeight.w600
+          )
         ),
       ),
     );
@@ -761,6 +762,10 @@ class _ProfilePageState extends State<ProfilePage> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
+                leading: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(''),
+                ),
                 title: Text(name),
               ),
             );
@@ -769,6 +774,36 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
   }
+
+  buildProjects2() {
+    Iterable<String> projectNames = project.keys;
+    return Column(
+      children: <Widget>[
+        ...projectNames.map(
+          (name) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                title: Text(name),
+              ),
+            );
+          },
+        ).toList(),
+      ],
+    );
+  }
+
+  // buildCollaborator() {
+  //   return Column(
+  //     children: <Widget>[
+  //       ...collaborators
+  //           .map(
+  //             (collaborator) => UserCard(user: collaborator),
+  //           )
+  //           .toList(),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -960,7 +995,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   widget.profileId != currentUser.id
-                      ? Text('')
+                      ? Container(
+                        height: 0,
+                        width: 0,
+                        child: Text(''
+                        ),
+                      )
                       : Positioned(
                           right: 3,
                           top: 20,
@@ -985,6 +1025,66 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Icons.menu,
                                   color: Colors.white,
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                  widget.profileId != currentUser.id
+                      ? Text('')
+                      : Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  modalSheetFunction(
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 18, 0, 10),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: Text('PROJECTS',
+                                                style: GoogleFonts.roboto(
+                                                  fontSize: 20,
+                                                  letterSpacing: 0.8,
+                                                  fontWeight: FontWeight.w300,
+                                                )),
+                                          ),
+                                        ),
+                                        buildProjects(),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(6, 10, 0, 6),
+                                          child: ListTile(
+                                              leading: Icon(
+                                                Icons.add_circle_outline,
+                                                size: 50,
+                                              ),
+                                              title: Text('Add Project'),
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CreateProjectPage(
+                                                      profileId:
+                                                          widget.profileId,
+                                                    ),
+                                                  ),
+                                                );
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Icon(CupertinoIcons.add, size: 40),
                               ),
                             ),
                           ),

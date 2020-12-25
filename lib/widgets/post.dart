@@ -203,7 +203,7 @@ class _PostState extends State<Post> {
                 backgroundColor: Colors.grey,
               ),
               title: GestureDetector(
-                onTap: () => Navigator.of(context).pushReplacement(
+                onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ProfilePage(
                       profileId: ownerId,
@@ -401,64 +401,129 @@ class _PostState extends State<Post> {
       key: _reachoutKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(reachoutQ1),
-          Flexible(
-            child: TextFormField(
-              validator: (value) {
-                if (value == null || value.trim() == '') {
-                  return "";
-                }
-                return null;
-              },
-              onSaved: (value) {
-                reachoutAns1 = value;
-              },
-              maxLines: 5,
-              minLines: 3,
-              autocorrect: true,
-              maxLength: 200,
-              decoration: customInputDecoration,
-            ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(3, 3, 0, 4),
+            child: Text(reachoutQ1),
           ),
-          Text(reachoutQ2),
-          Flexible(
-            child: TextFormField(
-              validator: (value) {
-                if (value == null || value.trim() == '') {
-                  return "";
-                }
-                return null;
-              },
-              onSaved: (value) {
-                reachoutAns2 = value;
-              },
-              maxLines: 5,
-              minLines: 3,
-              autocorrect: true,
-              maxLength: 200,
-              decoration: customInputDecoration,
-            ),
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.trim() == '') {
+                return "";
+              }
+              return null;
+            },
+            onSaved: (value) {
+              reachoutAns1 = value;
+            },
+            maxLines: 5,
+            minLines: 3,
+            autocorrect: true,
+            maxLength: 200,
+            decoration: customInputDecoration,
           ),
-          Text(reachoutQ3),
-          Flexible(
-            child: TextFormField(
-              validator: (value) {
-                if (value == null || value.trim() == '') {
-                  return "";
-                }
-                return null;
-              },
-              onSaved: (value) {
-                reachoutAns3 = value;
-              },
-              maxLines: 5,
-              minLines: 3,
-              autocorrect: true,
-              maxLength: 200,
-              decoration:
-                  customInputDecoration, //created at the starting of the file
+          Padding(
+            padding: EdgeInsets.fromLTRB(3, 3, 0, 4),
+            child: Text(reachoutQ2),
+          ),
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.trim() == '') {
+                return "";
+              }
+              return null;
+            },
+            onSaved: (value) {
+              reachoutAns2 = value;
+            },
+            maxLines: 5,
+            minLines: 3,
+            autocorrect: true,
+            maxLength: 200,
+            decoration: customInputDecoration,
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(3, 3, 0, 4),
+            child: Text(reachoutQ3),
+          ),
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.trim() == '') {
+                return "";
+              }
+              return null;
+            },
+            onSaved: (value) {
+              reachoutAns3 = value;
+            },
+            maxLines: 5,
+            minLines: 3,
+            autocorrect: true,
+            maxLength: 200,
+            decoration:
+                customInputDecoration, //created at the starting of the file
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 6.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    elevation: MaterialStateProperty.all(0.0),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    side: MaterialStateProperty.all(
+                      BorderSide(color: Colors.black),
+                    ),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                  ),
+                  onPressed: reachout,
+                  child: Text(
+                    'SAVE',
+                    style: GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    elevation: MaterialStateProperty.all(0.0),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    side: MaterialStateProperty.all(
+                      BorderSide(color: Colors.black),
+                    ),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                  ),
+                  onPressed: leaveReachout,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      'CANCEL',
+                      style: GoogleFonts.roboto(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -471,52 +536,24 @@ class _PostState extends State<Post> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            'ReachOut Form',
-            textAlign: TextAlign.center,
-          ),
+          title: Text('ReachOut Form'.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: GoogleFonts.roboto(
+                fontSize: 20,
+                letterSpacing: 0.7,
+              )),
           content: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 0),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.6,
-              width: MediaQuery.of(context).size.width * 0.6,
+              width: MediaQuery.of(context).size.width * 1,
               child: Column(
                 children: [
-                  Flexible(
-                    flex: 4,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: reachoutForm(),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        FlatButton(
-                          onPressed: reachout,
-                          child: Text(
-                            'SEND',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        FlatButton(
-                          onPressed: leaveReachout,
-                          child: Text(
-                            'CANCEL',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: reachoutForm(),
+                  )
                 ],
               ),
             ),
@@ -540,17 +577,17 @@ class _PostState extends State<Post> {
     bool isValid = _reachoutKey.currentState.validate();
     if (isValid) {
       reachoutMessage =
-          'This is a Reachout message from ${currentUser.firstName} ${currentUser.lastName}\n\n';
+          'This is a Reachout message\n\n';
       String textMessage = reachoutMessage +
-          reachoutQ1 +
+          reachoutQ1.toUpperCase() +
           ':\n' +
           reachoutAns1 +
           '\n\n' +
-          reachoutQ2 +
+          reachoutQ2.toUpperCase() +
           ':\n' +
           reachoutAns2 +
           '\n\n' +
-          reachoutQ3 +
+          reachoutQ3.toUpperCase() +
           ':\n' +
           reachoutAns3;
       messagesRef
@@ -562,6 +599,7 @@ class _PostState extends State<Post> {
         'sender': currentUser.id,
         'text': textMessage,
         'receiver': ownerId,
+         'time': FieldValue.serverTimestamp(),
       });
       messagesRef
           .document(ownerId)
@@ -572,6 +610,7 @@ class _PostState extends State<Post> {
         'sender': currentUser.id,
         'text': textMessage,
         'receiver': ownerId,
+         'time': FieldValue.serverTimestamp(),
       });
       leaveReachout();
     }

@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/models/constants.dart';
 import 'package:reachout/models/project.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,24 +22,19 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   bool isLoading;
   Project user;
 
-  buildField(String text, TextEditingController controller) {
+  buildField(String text, TextField textFieldFunction) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: 12),
+          padding: EdgeInsets.fromLTRB(7, 12, 0, 0),
           child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
+            text.toUpperCase(),
+            style: kTextHeaderTextFields),
         ),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: "Data",
-          ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
+          child: textFieldFunction,
         ),
       ],
     );
@@ -95,35 +93,86 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: <Widget>[
-                      buildField("Bio", bioController),
-                      buildField("Contact", contactController),
-                      buildField("Name", nameController)
+                      buildField(
+                          "Bio", multilineTextField('Bio', bioController)),
+                      buildField("Contact",
+                          multilineTextField('Contact', contactController)),
+                      buildField(
+                          "Name", singlelineTextField('Name', nameController)),
                     ],
                   ),
                 ),
-                RaisedButton(
-                  onPressed: createProject,
-                  child: Text(
-                    'Create',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    onPressed: cancelUpdate,
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                  padding: const EdgeInsets.only(right: 6.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0,
+                            MediaQuery.of(context).viewInsets.bottom),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            elevation: MaterialStateProperty.all(0.0),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            side: MaterialStateProperty.all(
+                              BorderSide(color: Colors.black),
+                            ),
+                            padding:
+                                MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                          ),
+                          onPressed: createProject,
+                          child: Text(
+                            'SAVE',
+                            style: GoogleFonts.roboto(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.4,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0,
+                            MediaQuery.of(context).viewInsets.bottom),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            elevation: MaterialStateProperty.all(0.0),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            side: MaterialStateProperty.all(
+                              BorderSide(color: Colors.black),
+                            ),
+                            padding:
+                                MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                          ),
+                          onPressed: cancelUpdate,
+                          child: Padding(
+                            padding: EdgeInsets.all(6.0),
+                            child: Text(
+                              'CANCEL',
+                              style: GoogleFonts.roboto(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
