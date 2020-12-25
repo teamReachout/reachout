@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -701,6 +702,7 @@ class _ProjectPageState extends State<ProjectPage> {
     doc.documents.forEach((doc) {
       posts.add(doc.data['mediaUrl']);
     });
+    print(posts);
   }
 
   getProject() async {
@@ -918,10 +920,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                 ),
                               ),
                             ),
-                            // buildAreaOfWork(),
-                            // Divider(
-                            //   thickness: 2,
-                            // ),
                             Card(
                               elevation: 0.5,
                               color: Colors.grey[200],
@@ -940,9 +938,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                 ],
                               ),
                             ),
-                            // buildAboutProject(),
-
-                            //buildDivider(),
                             Card(
                               elevation: 0.5,
                               color: Colors.grey[200],
@@ -961,10 +956,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                 ],
                               ),
                             ),
-                            // buildWhyProject(),
-                            // Divider(
-                            //   thickness: 2,
-                            // ),
                             Padding(
                               padding: EdgeInsets.only(top: 12.0),
                               child: Card(
@@ -985,10 +976,31 @@ class _ProjectPageState extends State<ProjectPage> {
                                         itemSize: 100,
                                         itemBuilder: _buildPostItem,
                                         itemCount: posts.length,
+                                        focusOnItemTap: true,
                                         reverse: true,
                                         onReachEnd: null,
                                         // dynamicItemSize: true,
                                       ),
+                                      // child: CarouselSlider(
+
+                                      //   options: CarouselOptions(
+                                      //     scrollDirection: Axis.horizontal,
+                                      //     aspectRatio: 16 / 9,
+                                      //   ),
+                                      //   items: [
+                                      //     ...posts.map((post) {
+                                      //       Container(
+                                      //         child: Center(
+                                      //           child: Image.network(
+                                      //             post,
+                                      //             fit: BoxFit.cover,
+                                      //             width: 1000,
+                                      //           ),
+                                      //         ),
+                                      //       );
+                                      //     }).toList(),
+                                      //   ],
+                                      // ),
                                     ),
                                   ],
                                 ),
