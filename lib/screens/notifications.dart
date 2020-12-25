@@ -115,7 +115,7 @@ class _NotificationsState extends State<Notifications> {
             ),
           ),
           primary: true,
-          title: Text('Reachout'.toUpperCase(),
+          title: Text('notifications'.toUpperCase(),
               style: GoogleFonts.roboto(
                   fontSize: 20,
                   fontWeight: FontWeight.w300,

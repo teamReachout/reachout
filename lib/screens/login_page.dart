@@ -224,22 +224,27 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 12,
                       ),
-                      FlatButton(
-                        textColor: Theme.of(context).primaryColor,
-                        child: Text(
-                          'Create new account',
-                          style: TextStyle(
-                            color: Color.fromRGBO(89, 89, 89, 1),
+                      Container(
+                        width: 175,
+                        height: 40,
+                        child: RaisedButton(
+                          child: Text(
+                            'REGISTER',
+                            style: TextStyle(color: Colors.white),
                           ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (ctx) =>
+                                    RegistrationPage(auth: widget.auth),
+                              ),
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (ctx) =>
-                                  RegistrationPage(auth: widget.auth),
-                            ),
-                          );
-                        },
                       ),
                     ],
                   ),

@@ -112,15 +112,15 @@ class _HomeState extends State<Home> {
               ),
             ),
             BottomNavigationBarItem(
-              icon: Icon(MdiIcons.helpCircleOutline),
-              activeIcon: Icon(MdiIcons.helpCircle),
+              icon: Icon(MdiIcons.clipboardList),
+              activeIcon: Icon(MdiIcons.clipboardListOutline),
               title: Container(
                 height: 0,
               ),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline),
-              activeIcon: Icon(Icons.add_circle),
+             icon: Icon(MdiIcons.helpCircleOutline),
+              activeIcon: Icon(MdiIcons.helpCircle),
               title: Container(
                 height: 0,
               ),

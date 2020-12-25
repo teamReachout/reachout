@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reachout/home.dart';
 import 'package:reachout/models/constants.dart';
 import 'package:reachout/screens/add_problems.dart';
@@ -92,7 +93,22 @@ class _ProblemsScreenState extends State<ProblemsScreen> {
       ),
       backgroundColor: Colors.white10,
       appBar: PreferredSize(
-        child: Appbar(),
+        child: AppBar(
+          centerTitle: true,
+          toolbarOpacity: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: const Radius.circular(7),
+            ),
+          ),
+          primary: true,
+          title: Text('questions'.toUpperCase(),
+              style: GoogleFonts.roboto(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300,
+                  color: const Color.fromRGBO(244, 248, 245, 1),
+                  letterSpacing: 1.2)),
+        ),
         preferredSize: const Size.fromHeight(55),
       ),
       body: Container(
