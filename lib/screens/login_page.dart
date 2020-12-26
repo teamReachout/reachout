@@ -94,9 +94,9 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Sign In',
+                'SIGN IN',
                 style: TextStyle(
-                  fontSize: 50,
+                  fontSize: 40,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),

@@ -78,9 +78,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Sign In',
+                'REGISTER',
                 style: TextStyle(
-                  fontSize: 50,
+                  fontSize: 40,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
@@ -292,7 +292,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         height: 40,
                         child: RaisedButton(
                           child: Text(
-                            'LOGIN',
+                            'SIGN UP',
                             style: TextStyle(color: Colors.white),
                           ),
                           shape: RoundedRectangleBorder(
@@ -308,7 +308,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       FlatButton(
                         textColor: Theme.of(context).primaryColor,
                         child: Text(
-                          'Login into account',
+                          'BACK TO LOGIN',
                           style: TextStyle(
                             color: Color.fromRGBO(89, 89, 89, 1),
                           ),
