@@ -783,10 +783,13 @@ class _PostState extends State<Post> {
   }
 
   buildDescription() {
-    return ListTile(
-      title: Text(
-        description,
-        textAlign: TextAlign.start,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 4.0),
+      child: ListTile(
+        title: Text(
+          description,
+          textAlign: TextAlign.start,
+        ),
       ),
     );
   }

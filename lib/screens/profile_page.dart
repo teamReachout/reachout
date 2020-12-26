@@ -970,7 +970,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       left: 0,
                       right: 0,
                       child: Container(
-                        padding: EdgeInsets.only(top: 30),
+                        padding: EdgeInsets.only(top: 18),
                         decoration: BoxDecoration(
                           color: Color(0xFF393e46),
                           borderRadius: BorderRadius.only(
