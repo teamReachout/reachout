@@ -90,8 +90,8 @@ class _PostState extends State<Post> {
   String reachoutAns1;
   String reachoutAns2;
   String reachoutAns3;
-  String reachoutQ1 = 'Briefly explain your idea';
-  String reachoutQ2 = 'What is your revenue strategy?';
+  String reachoutQ1 = 'Why are you reaching out?';
+  String reachoutQ2 = 'Briefly explain your idea';
   String reachoutQ3 = 'What makes you different?';
   _PostState({
     this.postId,

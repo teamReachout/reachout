@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:reachout/home.dart';
+import 'package:reachout/widgets/loading_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Comments extends StatefulWidget {
@@ -46,7 +47,7 @@ class CommentsState extends State<Comments> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return LoadingIndicator();
         }
         List<Comment> comments = [];
         snapshot.data.documents.forEach((doc) {
